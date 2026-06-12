@@ -1,0 +1,4084 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EATDY - ผู้ช่วยแนะนำอาหารเพื่อสุขภาพ</title>
+<style>
+  /* ============================================================
+     CSS VARIABLES & RESET
+  ============================================================ */
+  :root {
+    --primary: #4CAF50;
+    --primary-light: #81C784; 
+    --primary-dark: #388E3C;
+    --primary-bg: #E8F5E9;
+    --secondary: #FF9800;
+    --secondary-light: #FFE0B2;
+    --accent: #2196F3;
+    --accent-light: #E3F2FD;
+    --danger: #F44336;
+    --danger-light: #FFEBEE;
+    --warning: #FFC107;
+    --warning-light: #FFF8E1;
+    --surface: #FFFFFF;
+    --surface-2: #F8F9FA;
+    --surface-3: #F1F3F5;
+    --border: #E0E0E0;
+    --text-primary: #212121;
+    --text-secondary: #757575;
+    --text-hint: #BDBDBD;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+    --radius-full: 9999px;
+    --transition: 0.2s ease;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  background: var(--surface);
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+  /* ============================================================
+     PHONE FRAME — responsive, no decorative border
+  ============================================================ */
+  .phone {
+    width: 100%;
+    min-height: 100vh;
+    background: var(--surface);
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .phone-label { display: none; }
+
+  .screen {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .screen::-webkit-scrollbar { display: none; }
+
+  /* ============================================================
+     STATUS BAR
+  ============================================================ */
+  .status-bar {
+    background: var(--surface);
+    padding: 12px 20px 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid transparent;
+  }
+
+  /* ============================================================
+     TYPOGRAPHY
+  ============================================================ */
+  h1 { font-size: 22px; font-weight: 700; color: var(--text-primary); }
+  h2 { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+  h3 { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+  p  { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* ============================================================
+     BUTTONS
+  ============================================================ */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 20px;
+    border-radius: var(--radius-full);
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition);
+    text-decoration: none;
+  }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(76,175,80,0.35);
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+
+  .btn-secondary {
+    background: var(--surface-3);
+    color: var(--text-primary);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--primary);
+    color: var(--primary);
+  }
+
+  .btn-full { width: 100%; }
+
+  .btn-order {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: white;
+    font-size: 16px;
+    padding: 16px 24px;
+    border-radius: var(--radius-lg);
+    box-shadow: 0 6px 20px rgba(76,175,80,0.4);
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-weight: 700;
+    letter-spacing: 0.3px;
+  }
+  .btn-order:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(76,175,80,0.5); }
+  .btn-order:active { transform: scale(0.98); }
+  .btn-order:disabled {
+    background: var(--text-hint);
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* ============================================================
+     CHIPS
+  ============================================================ */
+  .chip-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .chip {
+    padding: 6px 14px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1.5px solid var(--border);
+    background: var(--surface);
+    color: var(--text-secondary);
+    transition: all var(--transition);
+    white-space: nowrap;
+  }
+  .chip:hover { border-color: var(--primary-light); color: var(--primary); }
+  .chip.active {
+    background: var(--primary-bg);
+    border-color: var(--primary);
+    color: var(--primary-dark);
+  }
+
+  /* ============================================================
+     CARDS
+  ============================================================ */
+  .card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+  }
+
+  .card-hover {
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .card-hover:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+  .card-hover:active { transform: scale(0.99); }
+
+  /* ============================================================
+     DELIVERY CHANNEL SELECTOR  ← NEW
+  ============================================================ */
+  .channel-selector {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 4px 0;
+  }
+
+  .channel-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px 10px;
+    cursor: pointer;
+    transition: all var(--transition);
+    text-align: center;
+    background: var(--surface);
+    position: relative;
+    overflow: hidden;
+  }
+  .channel-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--primary-bg);
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+  .channel-card:hover::before { opacity: 0.5; }
+  .channel-card.selected {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+  }
+  .channel-card.selected::before { opacity: 1; }
+
+  .channel-card .channel-icon {
+    font-size: 28px;
+    display: block;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+  }
+  .channel-card .channel-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+  .channel-card .channel-desc {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+    display: block;
+    position: relative;
+    z-index: 1;
+  }
+  .channel-card.selected .channel-name { color: var(--primary-dark); }
+  .channel-card .check-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    font-size: 10px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .channel-card.selected .check-badge { display: flex; }
+
+  /* Delivery Platform Selector */
+  .platform-selector {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .platform-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition);
+    background: var(--surface);
+  }
+  .platform-item:hover { border-color: var(--primary-light); }
+  .platform-item.selected {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+  }
+
+  .platform-item .platform-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .platform-item .platform-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 900;
+    color: white;
+  }
+  .platform-item .platform-info { flex: 1; }
+  .platform-item .platform-name { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+  .platform-item .platform-meta { font-size: 11px; color: var(--text-secondary); margin-top: 1px; }
+  .platform-item .platform-radio {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+  }
+  .platform-item.selected .platform-radio {
+    border-color: var(--primary);
+    background: var(--primary);
+  }
+  .platform-item.selected .platform-radio::after {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: white;
+  }
+
+  /* ============================================================
+     PICKUP TOTAL PRICE + MAP ROUTE BUTTON  ← NEW
+  ============================================================ */
+  .pickup-total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    padding: 14px 16px;
+    background: var(--primary-bg);
+    border: 1.5px solid var(--primary-light);
+    border-radius: var(--radius-md);
+  }
+  .pickup-total-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+  }
+  .pickup-total-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary-dark);
+  }
+  .btn-map-route {
+    width: 100%;
+    margin-top: 10px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 800;
+    color: white;
+    background: linear-gradient(135deg, var(--accent) 0%, #1769AA 100%);
+    border: none;
+    border-radius: var(--radius-lg);
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(33,150,243,0.35);
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+  .btn-map-route:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(33,150,243,0.45);
+  }
+  .btn-map-route:active { transform: scale(0.98); }
+
+
+  /* ============================================================
+     SUCCESS MODAL  ← NEW
+  ============================================================ */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    padding: 20px;
+  }
+  .modal-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .modal-box {
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    padding: 28px 24px;
+    max-width: 320px;
+    width: 100%;
+    text-align: center;
+    transform: scale(0.85) translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    box-shadow: var(--shadow-lg);
+  }
+  .modal-overlay.show .modal-box {
+    transform: scale(1) translateY(0);
+  }
+
+  .modal-success-icon {
+    width: 72px;
+    height: 72px;
+    background: var(--primary-bg);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin: 0 auto 16px;
+    animation: bounceIn 0.5s cubic-bezier(0.34,1.56,0.64,1) 0.1s both;
+  }
+
+  @keyframes bounceIn {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .modal-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .modal-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  .modal-detail-card {
+    background: var(--surface-2);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+  .modal-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 4px 0;
+    font-size: 13px;
+  }
+  .modal-detail-row .label { color: var(--text-secondary); }
+  .modal-detail-row .value { font-weight: 700; color: var(--text-primary); }
+  .modal-detail-row .value.price { color: var(--primary-dark); }
+  .modal-detail-divider {
+    border: none;
+    border-top: 1px dashed var(--border);
+    margin: 8px 0;
+  }
+
+  .modal-btn-group {
+    display: flex;
+    gap: 10px;
+  }
+  .modal-btn-group .btn { flex: 1; font-size: 13px; padding: 12px; }
+
+  /* ============================================================
+     TOAST  ← NEW
+  ============================================================ */
+  .toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--text-primary);
+    color: white;
+    padding: 12px 20px;
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+    z-index: 10001;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    max-width: 90%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.warn   { background: var(--secondary); }
+  .toast.danger { background: var(--danger); }
+
+  /* ============================================================
+     MANUAL MEAL LOG MODAL  ← NEW
+  ============================================================ */
+  .manual-meal-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: var(--radius-lg);
+    border: 1.5px dashed var(--primary);
+    background: var(--primary-bg);
+    color: var(--primary-dark);
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .manual-meal-btn:hover { background: var(--primary-light); }
+  .manual-meal-btn:active { transform: scale(0.98); }
+
+  #manualMealModal .modal-box {
+    max-width: 360px;
+    text-align: left;
+    max-height: 85vh;
+    overflow-y: auto;
+  }
+  #manualMealModal .modal-title { text-align: center; }
+
+  .source-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 4px 0 14px;
+  }
+  .source-option {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 12px 8px;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition);
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-primary);
+    background: var(--surface);
+  }
+  .source-option.selected {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+    color: var(--primary-dark);
+  }
+
+  .macro-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+  }
+  .macro-grid .form-group { margin-bottom: 0; }
+  .macro-grid .form-input { padding: 10px; font-size: 13px; text-align: center; }
+  .form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+  }
+
+  /* ============================================================
+     ORDER HISTORY ITEM  ← UPDATED
+  ============================================================ */
+  .order-history-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--surface-3);
+  }
+  .order-history-item:last-child { border-bottom: none; }
+
+  .order-emoji {
+    width: 44px;
+    height: 44px;
+    background: var(--surface-3);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .order-info { flex: 1; }
+  .order-menu-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .order-restaurant { font-size: 12px; color: var(--text-secondary); }
+  .order-meta {
+    display: flex;
+    gap: 6px;
+    margin-top: 4px;
+    flex-wrap: wrap;
+  }
+  .order-tag {
+    font-size: 10px;
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+  }
+  .order-tag.delivery { background: var(--accent-light); color: var(--accent); }
+  .order-tag.pickup   { background: var(--primary-bg);  color: var(--primary-dark); }
+  .order-tag.date     { background: var(--surface-3);   color: var(--text-secondary); }
+
+  .order-price {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--primary-dark);
+    flex-shrink: 0;
+  }
+
+  /* ============================================================
+     SECTION HELPERS
+  ============================================================ */
+  .section-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 8px 0;
+  }
+
+  /* ============================================================
+     PAGE HEADER
+  ============================================================ */
+  .page-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px 12px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .back-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--surface-3);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+  .back-btn:hover { background: var(--border); }
+  .back-btn:active { transform: scale(0.95); }
+
+  /* ============================================================
+     BADGE / TAG
+  ============================================================ */
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .badge-green  { background: var(--primary-bg);    color: var(--primary-dark); }
+  .badge-orange { background: var(--secondary-light); color: #E65100; }
+  .badge-red    { background: var(--danger-light);  color: var(--danger); }
+  .badge-blue   { background: var(--accent-light);  color: var(--accent); }
+
+  /* ============================================================
+     HEALTH SCORE RING
+  ============================================================ */
+  .health-score-ring {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary) calc(var(--score) * 1%), var(--surface-3) 0%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .health-score-ring::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border-radius: 50%;
+    background: var(--surface);
+  }
+  .health-score-ring span {
+    position: relative;
+    z-index: 1;
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--primary-dark);
+  }
+
+  /* ============================================================
+     NUTRIENT BAR
+  ============================================================ */
+  .nutrient-bar-wrap { margin-bottom: 10px; }
+  .nutrient-bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-bottom: 4px;
+    color: var(--text-secondary);
+  }
+  .nutrient-bar-label strong { color: var(--text-primary); }
+  .nutrient-bar-track {
+    height: 6px;
+    background: var(--surface-3);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+  .nutrient-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    transition: width 0.6s ease;
+  }
+
+  /* ============================================================
+     BOTTOM NAV
+  ============================================================ */
+  .bottom-nav {
+    display: flex;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 8px 0 16px;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 200;
+  }
+
+  /* ให้ content ไม่ถูก bottom-nav บัง */
+  .screen { padding-bottom: 72px; }
+  .nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 4px;
+    cursor: pointer;
+    transition: all var(--transition);
+    border: none;
+    background: none;
+  }
+  .nav-item .nav-icon { font-size: 22px; transition: transform var(--transition); }
+  .nav-item .nav-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-hint);
+    transition: color var(--transition);
+  }
+  .nav-item.active .nav-label { color: var(--primary); }
+  .nav-item:hover .nav-icon { transform: translateY(-2px); }
+
+  /* ============================================================
+     LOGIN PAGE
+  ============================================================ */
+  .login-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 28px;
+    background: linear-gradient(160deg, var(--primary-bg) 0%, var(--surface) 60%);
+  }
+  .login-logo {
+    font-size: 52px;
+    margin-bottom: 8px;
+  }
+  .login-brand {
+    font-size: 26px;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin-bottom: 4px;
+  }
+  .login-tagline {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 40px;
+  }
+  .form-group { width: 100%; margin-bottom: 14px; }
+  .form-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    font-size: 14px;
+    outline: none;
+    transition: border-color var(--transition);
+    background: var(--surface);
+  }
+  .form-input:focus { border-color: var(--primary); }
+  .form-input::placeholder { color: var(--text-hint); }
+
+  .divider-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 20px 0;
+    width: 100%;
+  }
+  .divider-text::before,
+  .divider-text::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .divider-text span { font-size: 12px; color: var(--text-hint); white-space: nowrap; }
+
+  .social-btn {
+    width: 100%;
+    padding: 13px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-md);
+    background: var(--surface);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all var(--transition);
+    margin-bottom: 10px;
+  }
+  .social-btn:hover { background: var(--surface-2); }
+
+  /* ============================================================
+     ONBOARDING
+  ============================================================ */
+  .onboard-page {
+    min-height: 100vh;
+    padding: 24px 20px 40px;
+    overflow-y: auto;
+  }
+  .onboard-step {
+    display: none;
+  }
+  .onboard-step.active {
+    display: block;
+  }
+  .onboard-title {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 6px;
+  }
+  .onboard-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+    line-height: 1.5;
+  }
+
+  /* Buddy Cards */
+  .buddy-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .buddy-card {
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 14px;
+    text-align: center;
+    cursor: pointer;
+    transition: all var(--transition);
+    background: var(--surface);
+  }
+  .buddy-card:hover { border-color: var(--primary-light); transform: translateY(-2px); }
+  .buddy-card.selected {
+    border-color: var(--primary);
+    background: var(--primary-bg);
+  }
+  .buddy-card .buddy-emoji { font-size: 40px; display: block; margin-bottom: 8px; }
+  .buddy-card .buddy-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .buddy-card .buddy-trait { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+  /* Goal Cards */
+  .goal-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .goal-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 2px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition);
+    background: var(--surface);
+  }
+  .goal-item:hover { border-color: var(--primary-light); }
+  .goal-item.selected { border-color: var(--primary); background: var(--primary-bg); }
+  .goal-item .goal-icon { font-size: 24px; flex-shrink: 0; }
+  .goal-item .goal-text { flex: 1; }
+  .goal-item .goal-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .goal-item .goal-desc { font-size: 11px; color: var(--text-secondary); }
+
+  /* Progress bar onboarding */
+  .onboard-progress {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+  .progress-dot {
+    flex: 1;
+    height: 4px;
+    border-radius: var(--radius-full);
+    background: var(--border);
+    transition: background var(--transition);
+  }
+  .progress-dot.done { background: var(--primary); }
+
+  /* Slider */
+  .range-wrap { position: relative; margin-bottom: 8px; }
+  input[type=range] {
+    width: 100%;
+    -webkit-appearance: none;
+    height: 6px;
+    border-radius: var(--radius-full);
+    background: var(--primary-bg);
+    outline: none;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(76,175,80,0.4);
+  }
+  .range-value {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary-dark);
+    margin-top: 6px;
+  }
+  .range-unit { font-size: 14px; font-weight: 400; color: var(--text-secondary); }
+
+  /* ============================================================
+     HOME PAGE
+  ============================================================ */
+  .home-header {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+    padding: 15px 20px 15px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+  }
+  .home-header::before {
+    content: '';
+    position: absolute;
+    top: -30px; right: -30px;
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .home-header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; left: 20px;
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 18px;
+  }
+  .header-greeting { font-size: 13px; opacity: 0.85; }
+  .header-name { font-size: 22px; font-weight: 800; margin-top: 2px; }
+  .header-location {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .header-right { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .notif-btn {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: white;
+    transition: background var(--transition);
+    position: relative;
+  }
+  .notif-btn:hover { background: rgba(255,255,255,0.3); }
+  .notif-dot {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--secondary);
+    border: 2px solid var(--primary);
+  }
+
+  .score-pill {
+    background: rgba(255,255,255,0.2);
+    border-radius: var(--radius-full);
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 700;
+    backdrop-filter: blur(4px);
+  }
+
+  /* Buddy Banner */
+  .buddy-banner {
+    background: rgba(255,255,255,0.15);
+    border-radius: var(--radius-lg);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .buddy-avatar {
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+  .buddy-message { flex: 1; }
+  .buddy-message .buddy-msg-title { font-size: 13px; font-weight: 700; }
+  .buddy-message .buddy-msg-text { font-size: 12px; opacity: 0.9; margin-top: 2px; line-height: 1.4; }
+  .buddy-action-btns { display: flex; gap: 8px; margin-top: 10px; }
+  .buddy-btn {
+    padding: 7px 14px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    border: none;
+    transition: all var(--transition);
+  }
+  .buddy-btn-primary { background: white; color: var(--primary-dark); }
+  .buddy-btn-secondary { background: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.3); }
+
+  /* Home Content */
+  .home-content { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+
+  /* Search Bar */
+  .search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-full);
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: border-color var(--transition);
+  }
+  .search-bar:hover { border-color: var(--primary-light); }
+  .search-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: transparent;
+  }
+  .search-bar input::placeholder { color: var(--text-hint); }
+
+  /* Food DNA Card */
+  .dna-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    color: white;
+  }
+  .dna-title { font-size: 13px; font-weight: 700; opacity: 0.8; margin-bottom: 4px; }
+  .dna-score { font-size: 36px; font-weight: 900; color: #64FF64; }
+  .dna-subtitle { font-size: 12px; opacity: 0.7; margin-bottom: 12px; }
+  .dna-bars { display: flex; flex-direction: column; gap: 6px; }
+  .dna-bar-row { display: flex; align-items: center; gap: 8px; }
+  .dna-bar-label { font-size: 11px; width: 60px; opacity: 0.8; }
+  .dna-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.15); border-radius: var(--radius-full); overflow: hidden; }
+  .dna-bar-fill { height: 100%; border-radius: var(--radius-full); }
+  .dna-bar-val { font-size: 10px; opacity: 0.7; width: 40px; text-align: right; }
+
+  /* Restaurant Card */
+  .restaurant-card {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all var(--transition);
+    box-shadow: var(--shadow-sm);
+  }
+  .restaurant-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+  .restaurant-card:active { transform: scale(0.99); }
+
+  .restaurant-img {
+    height: 110px;
+    background: linear-gradient(135deg, var(--primary-bg), var(--surface-3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    position: relative;
+  }
+  .restaurant-promo {
+    position: absolute;
+    top: 8px; left: 8px;
+    background: var(--secondary);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+  }
+
+  .restaurant-body { padding: 12px; }
+  .restaurant-name { font-size: 14px; font-weight: 700; color: var(--text-primary); }
+  .restaurant-meta { display: flex; gap: 8px; margin-top: 4px; align-items: center; flex-wrap: wrap; }
+  .restaurant-rating { font-size: 12px; color: var(--secondary); font-weight: 700; }
+  .restaurant-dist { font-size: 12px; color: var(--text-secondary); }
+  .restaurant-price { font-size: 12px; color: var(--text-secondary); }
+
+  /* ============================================================
+     RESTAURANT DETAIL PAGE
+  ============================================================ */
+  .restaurant-hero {
+    height: 180px;
+    background: linear-gradient(135deg, var(--primary-bg), #C8E6C9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 72px;
+    position: relative;
+  }
+  .restaurant-hero .promo-banner {
+    position: absolute;
+    bottom: 12px;
+    left: 16px;
+    background: var(--secondary);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: var(--radius-full);
+  }
+
+  .restaurant-info { padding: 16px; border-bottom: 1px solid var(--border); }
+  .restaurant-info h2 { margin-bottom: 6px; }
+  .restaurant-stats { display: flex; gap: 16px; margin: 10px 0; }
+  .restaurant-stat { text-align: center; }
+  .restaurant-stat .stat-val { font-size: 16px; font-weight: 800; color: var(--text-primary); }
+  .restaurant-stat .stat-label { font-size: 10px; color: var(--text-secondary); }
+
+  .tab-bar {
+    display: flex;
+    border-bottom: 2px solid var(--border);
+    background: var(--surface);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .tab-item {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    transition: all var(--transition);
+  }
+  .tab-item.active { color: var(--primary); border-bottom-color: var(--primary); }
+
+  .menu-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  .menu-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    cursor: pointer;
+    transition: background var(--transition);
+    border-bottom: 1px solid var(--surface-3);
+  }
+  .menu-item:hover { background: var(--surface-2); }
+  .menu-item:active { background: var(--primary-bg); }
+  .menu-item:last-child { border-bottom: none; }
+
+  .menu-emoji-box {
+    width: 60px; height: 60px;
+    background: var(--surface-3);
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px;
+    flex-shrink: 0;
+  }
+  .menu-item-info { flex: 1; }
+  .menu-item-name { font-size: 14px; font-weight: 700; }
+  .menu-item-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; line-height: 1.4; }
+  .menu-item-tags { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+  .menu-item-price { font-size: 15px; font-weight: 800; color: var(--primary-dark); flex-shrink: 0; align-self: center; }
+
+  /* Nutrition tab */
+  .nutrition-tab { padding: 16px; }
+  .nutrition-avg-card {
+    background: var(--surface-2);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .nutrition-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .nutrition-cell {
+    text-align: center;
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 10px;
+  }
+  .nutrition-cell .n-val { font-size: 18px; font-weight: 800; color: var(--text-primary); }
+  .nutrition-cell .n-unit { font-size: 10px; color: var(--text-secondary); }
+  .nutrition-cell .n-label { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+
+  /* Review tab */
+  .review-tab { padding: 16px; }
+  .review-summary { display: flex; align-items: center; gap: 20px; margin-bottom: 16px; }
+  .review-big-score { font-size: 48px; font-weight: 900; color: var(--text-primary); }
+  .review-bars { flex: 1; }
+  .review-bar-row { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+  .review-bar-track { flex: 1; height: 5px; background: var(--surface-3); border-radius: var(--radius-full); overflow: hidden; }
+  .review-bar-fill { height: 100%; background: var(--secondary); border-radius: var(--radius-full); }
+  .review-bar-label { font-size: 10px; color: var(--text-secondary); width: 20px; }
+  .write-review-btn {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px dashed var(--border);
+    border-radius: var(--radius-md);
+    background: transparent;
+    font-size: 13px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    margin-top: 12px;
+    transition: all var(--transition);
+  }
+  .write-review-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+  /* ============================================================
+     MENU DETAIL PAGE  ← ORDER SECTION ADDED
+  ============================================================ */
+  .menu-detail-hero {
+    height: 200px;
+    background: linear-gradient(135deg, var(--primary-bg), #C8E6C9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 80px;
+    position: relative;
+  }
+
+  .menu-detail-body { padding: 16px; }
+  .menu-detail-header { margin-bottom: 12px; }
+  .menu-detail-name { font-size: 22px; font-weight: 800; }
+  .menu-detail-restaurant { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .menu-detail-price { font-size: 28px; font-weight: 900; color: var(--primary-dark); margin-top: 4px; }
+  .menu-detail-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin-top: 8px; }
+
+  .health-score-bar {
+    background: linear-gradient(135deg, var(--primary-bg), #C8E6C9);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .health-score-bar .score-info { flex: 1; }
+  .health-score-bar .score-title { font-size: 13px; font-weight: 700; color: var(--primary-dark); }
+  .health-score-bar .score-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+  .nutrition-full-table { margin: 14px 0; }
+  .nutrition-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--surface-3);
+    font-size: 13px;
+  }
+  .nutrition-row:last-child { border-bottom: none; }
+  .nutrition-row .n-name { color: var(--text-secondary); }
+  .nutrition-row .n-amount { font-weight: 700; color: var(--text-primary); }
+
+  /* ============================================================
+     ORDER SECTION (inside Menu Detail)  ← NEW
+  ============================================================ */
+  .order-section {
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    overflow: hidden;
+    margin: 14px 0;
+  }
+  .order-section-header {
+    padding: 14px 16px;
+    background: var(--surface-2);
+    border-bottom: 1px solid var(--border);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .order-section-body { padding: 16px; }
+
+  .channel-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .pickup-info {
+    background: var(--primary-bg);
+    border-radius: var(--radius-md);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 12px;
+  }
+  .pickup-info .pickup-icon { font-size: 24px; }
+  .pickup-info .pickup-text { flex: 1; }
+  .pickup-info .pickup-title { font-size: 13px; font-weight: 700; color: var(--primary-dark); }
+  .pickup-info .pickup-desc { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+
+  .order-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    padding: 6px 0;
+  }
+  .order-summary-row .summary-label { color: var(--text-secondary); }
+  .order-summary-row .summary-value { font-weight: 700; color: var(--text-primary); }
+  .order-summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 800;
+    padding: 10px 0 4px;
+    border-top: 1.5px solid var(--border);
+    margin-top: 6px;
+  }
+  .order-summary-total .total-price { color: var(--primary-dark); font-size: 20px; }
+
+  .order-btn-wrap { margin-top: 20px; padding-bottom: 8px; }
+
+  /* Quantity Selector */
+  .qty-selector {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 4px 0;
+  }
+  .qty-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    background: var(--surface);
+    color: var(--primary);
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition);
+    line-height: 1;
+  }
+  .qty-btn:hover { background: var(--primary); color: white; }
+  .qty-btn:active { transform: scale(0.92); }
+  .qty-value { font-size: 18px; font-weight: 800; color: var(--text-primary); min-width: 24px; text-align: center; }
+
+  /* ============================================================
+     MAP PAGE
+  ============================================================ */
+  .map-container {
+    height: 260px;
+    background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .map-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(76,175,80,0.12) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(76,175,80,0.12) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .map-road-h {
+    position: absolute;
+    height: 10px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 2px;
+  }
+  .map-road-v {
+    position: absolute;
+    width: 10px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 2px;
+  }
+  .map-pin {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform var(--transition);
+    z-index: 10;
+  }
+  .map-pin:hover { transform: scale(1.1); }
+  .map-pin-bubble {
+    background: var(--surface);
+    border-radius: var(--radius-sm);
+    padding: 4px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    box-shadow: var(--shadow-md);
+    white-space: nowrap;
+    border: 1.5px solid var(--border);
+  }
+  .map-pin-bubble.green { border-color: var(--primary); color: var(--primary-dark); }
+  .map-pin-bubble.orange { border-color: var(--secondary); color: #E65100; }
+  .map-pin-bubble.red { border-color: var(--danger); color: var(--danger); }
+  .map-pin-tail {
+    width: 0; height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 7px solid var(--surface);
+    margin-top: -1px;
+  }
+  .map-user-dot {
+    position: absolute;
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid white;
+    box-shadow: 0 0 0 6px rgba(33,150,243,0.2);
+  }
+  .map-controls {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .map-ctrl-btn {
+    width: 32px; height: 32px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* Map Filter */
+  .map-filter-bar {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+    white-space: nowrap;
+    scrollbar-width: none;
+  }
+  .map-filter-bar::-webkit-scrollbar { display: none; }
+  .map-filter-bar .chip { display: inline-flex; margin-right: 6px; }
+
+  .map-restaurant-list { padding: 0; }
+  .map-rest-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--surface-3);
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+  .map-rest-item:hover { background: var(--surface-2); }
+  .map-rest-item:last-child { border-bottom: none; }
+  .map-rest-emoji {
+    width: 48px; height: 48px;
+    background: var(--surface-3);
+    border-radius: var(--radius-md);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; flex-shrink: 0;
+  }
+  .map-rest-info { flex: 1; }
+  .map-rest-name { font-size: 14px; font-weight: 700; }
+  .map-rest-meta { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+  .map-rest-score {
+    font-size: 13px; font-weight: 800;
+    color: var(--primary-dark);
+    background: var(--primary-bg);
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+  }
+
+  /* Popup */
+  .map-popup {
+    display: none;
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    background: var(--surface);
+    border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+    padding: 20px 16px;
+    box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+    z-index: 50;
+    transition: transform 0.3s ease;
+  }
+  .map-popup.show { display: block; }
+  .popup-handle {
+    width: 40px; height: 4px;
+    background: var(--border);
+    border-radius: var(--radius-full);
+    margin: 0 auto 16px;
+  }
+
+  /* ============================================================
+     AI CHAT PAGE
+  ============================================================ */
+  .chat-page { display: flex; flex-direction: column; height: 100%; }
+  .chat-header {
+    padding: 14px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .chat-avatar {
+    width: 40px; height: 40px;
+    background: var(--primary-bg);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .chat-online {
+    position: absolute; bottom: 1px; right: 1px;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: 2px solid white;
+  }
+  .chat-info { flex: 1; }
+  .chat-name { font-size: 14px; font-weight: 700; }
+  .chat-status { font-size: 12px; color: var(--primary); }
+
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .chat-messages::-webkit-scrollbar { display: none; }
+
+  .msg-bubble {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: var(--radius-lg);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .msg-bubble.bot {
+    background: var(--surface-2);
+    color: var(--text-primary);
+    align-self: flex-start;
+    border-bottom-left-radius: 4px;
+  }
+  .msg-bubble.user {
+    background: var(--primary);
+    color: white;
+    align-self: flex-end;
+    border-bottom-right-radius: 4px;
+  }
+  .msg-bubble.bot strong { color: var(--primary-dark); }
+
+  .chat-quick-chips {
+    padding: 8px 12px;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    border-top: 1px solid var(--border);
+  }
+  .chat-quick-chips::-webkit-scrollbar { display: none; }
+  .chat-quick-chip {
+    padding: 6px 12px;
+    border-radius: var(--radius-full);
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+  .chat-quick-chip:hover { background: var(--primary-bg); border-color: var(--primary); }
+
+  .chat-input-bar {
+    padding: 10px 12px;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+  .chat-input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    outline: none;
+    transition: border-color var(--transition);
+  }
+  .chat-input:focus { border-color: var(--primary); }
+  .chat-send-btn {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--primary);
+    border: none;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    transition: all var(--transition);
+    flex-shrink: 0;
+  }
+  .chat-send-btn:hover { background: var(--primary-dark); transform: scale(1.05); }
+
+  /* ============================================================
+     STATS / SUMMARY PAGE
+  ============================================================ */
+  .stats-page { padding-bottom: 80px; }
+  .stats-header {
+    padding: 16px 16px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+  }
+  .date-nav {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .date-nav-btn {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--surface-3);
+    border: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    transition: background var(--transition);
+  }
+  .date-nav-btn:hover { background: var(--border); }
+
+  .big-score-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    margin: 16px;
+    border-radius: var(--radius-xl);
+    padding: 20px;
+    color: white;
+    text-align: center;
+  }
+  .big-score-num { font-size: 56px; font-weight: 900; }
+  .big-score-label { font-size: 13px; opacity: 0.85; margin-top: 4px; }
+  .big-score-sub { font-size: 12px; opacity: 0.7; margin-top: 4px; }
+
+  .week-chart {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    height: 60px;
+    gap: 6px;
+    padding: 0 4px;
+  }
+  .week-bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .week-bar { width: 100%; border-radius: 4px 4px 0 0; background: var(--primary-light); transition: height 0.5s ease; }
+  .week-bar.today { background: var(--primary); }
+  .week-day { font-size: 10px; color: var(--text-secondary); font-weight: 600; }
+
+  .nutrient-section { padding: 0 16px; }
+  .progress-item { margin-bottom: 14px; }
+  .progress-header { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 6px; }
+  .progress-header .prog-name { font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .progress-header .prog-val { color: var(--text-secondary); }
+  .progress-track { height: 8px; background: var(--surface-3); border-radius: var(--radius-full); overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: var(--radius-full); transition: width 0.6s ease; }
+
+  .insight-list { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .insight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+  }
+  .insight-icon { font-size: 24px; flex-shrink: 0; }
+  .insight-text { flex: 1; }
+  .insight-title { font-size: 13px; font-weight: 700; }
+  .insight-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; line-height: 1.4; }
+
+  /* Weight tracker */
+  .weight-tracker {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 16px;
+    margin: 0 16px;
+  }
+  .weight-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+  .weight-main { font-size: 28px; font-weight: 900; color: var(--text-primary); }
+  .weight-goal { font-size: 12px; color: var(--text-secondary); }
+  .weight-change { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 700; }
+  .weight-change.down { color: var(--primary); }
+  .weight-mini-chart {
+    height: 50px;
+    background: var(--surface-2);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    padding: 4px 8px;
+    gap: 4px;
+  }
+  .mini-bar {
+    flex: 1;
+    background: var(--primary-light);
+    border-radius: 3px 3px 0 0;
+    min-width: 8px;
+  }
+  .log-weight-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    border: 1.5px dashed var(--primary);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .log-weight-btn:hover { background: var(--primary-bg); }
+
+  /* ============================================================
+     PROFILE PAGE
+  ============================================================ */
+  .profile-page { padding-bottom: 80px; }
+  .profile-header {
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+    padding: 24px 20px 28px;
+    color: white;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .profile-header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+  }
+  .profile-avatar {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 80px;
+    margin: 0 auto 12px;
+    border: 3px solid rgba(255,255,255,0.4);
+    position: relative;
+    z-index: 1;
+  }
+  .profile-name { font-size: 22px; font-weight: 800; position: relative; z-index: 1; }
+  .profile-subtitle { font-size: 13px; opacity: 0.8; margin-top: 4px; position: relative; z-index: 1; }
+
+  .profile-stats {
+    display: flex;
+    background: rgba(255,255,255,0.15);
+    border-radius: var(--radius-lg);
+    margin: 16px 0 0;
+    padding: 12px 0;
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .profile-stat { flex: 1; text-align: center; }
+  .profile-stat .ps-val { font-size: 18px; font-weight: 800; }
+  .profile-stat .ps-label { font-size: 10px; opacity: 0.8; margin-top: 2px; }
+  .profile-stat:not(:last-child) { border-right: 1px solid rgba(255,255,255,0.2); }
+
+  .profile-body { padding: 16px; }
+  .profile-section { margin-bottom: 16px; }
+  .profile-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .profile-score-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .profile-score-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 14px;
+    text-align: center;
+  }
+  .profile-score-card .psc-val { font-size: 28px; font-weight: 900; color: var(--primary-dark); }
+  .profile-score-card .psc-max { font-size: 12px; color: var(--text-hint); }
+  .profile-score-card .psc-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+  .dna-preview {
+    background: #1a1a2e;
+    border-radius: var(--radius-md);
+    padding: 14px;
+    color: white;
+  }
+  .dna-preview-title { font-size: 13px; font-weight: 700; margin-bottom: 10px; }
+  .dna-preview-item { font-size: 12px; opacity: 0.85; padding: 3px 0; }
+  .dna-preview-item span { opacity: 0.6; font-size: 11px; margin-right: 6px; }
+
+  .menu-list-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--surface-3);
+    cursor: pointer;
+    transition: all var(--transition);
+  }
+  .menu-list-item:last-child { border-bottom: none; }
+  .menu-list-item:hover { padding-left: 4px; }
+  .menu-list-item .mli-left { display: flex; align-items: center; gap: 12px; }
+  .menu-list-item .mli-icon {
+    width: 36px; height: 36px;
+    border-radius: var(--radius-sm);
+    background: var(--surface-3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .menu-list-item .mli-text { font-size: 14px; font-weight: 600; }
+  .menu-list-item .mli-chevron { color: var(--text-hint); font-size: 16px; }
+
+  /* ============================================================
+     NOTIFICATION PAGE
+  ============================================================ */
+  .notif-page { padding-bottom: 80px; }
+  .notif-header {
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .notif-item {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--surface-3);
+    cursor: pointer;
+    transition: background var(--transition);
+  }
+  .notif-item:hover { background: var(--surface-2); }
+  .notif-item.unread { background: var(--primary-bg); }
+  .notif-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+  .notif-icon.green { background: var(--primary-bg); }
+  .notif-icon.orange { background: var(--secondary-light); }
+  .notif-icon.red { background: var(--danger-light); }
+  .notif-icon.blue { background: var(--accent-light); }
+  .notif-text { flex: 1; }
+  .notif-title { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+  .notif-desc { font-size: 12px; color: var(--text-secondary); margin-top: 2px; line-height: 1.4; }
+  .notif-time { font-size: 11px; color: var(--text-hint); margin-top: 4px; }
+  .notif-unread-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--primary);
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  /* ============================================================
+     MISC
+  ============================================================ */
+  .floating-tip {
+    position: fixed;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.75);
+    color: white;
+    font-size: 12px;
+    padding: 8px 16px;
+    border-radius: var(--radius-full);
+    white-space: nowrap;
+    z-index: 200;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .floating-tip.show { opacity: 1; }
+
+  .empty-state {
+    padding: 40px 20px;
+    text-align: center;
+  }
+  .empty-state .empty-icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state .empty-title { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .empty-state .empty-desc { font-size: 13px; color: var(--text-secondary); }
+
+  .hidden { display: none !important; }
+
+  /* Scrollable horizontal row */
+  .h-scroll {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .h-scroll::-webkit-scrollbar { display: none; }
+
+  .tag-bar {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scrollbar-width: none;
+  }
+  .tag-bar::-webkit-scrollbar { display: none; }
+  /* ============================================================
+   FLOATING AI CHAT STYLE (ปรับเป็นแบบลอยตัวมุมขวาล่าง)
+============================================================ */
+/* 1. หน้าต่างแชทลอยตัว */
+#screen-chat {
+  position: fixed !important;
+  bottom: 90px; /* อยู่เหนือปุ่มลอยเล็กน้อย */
+  right: 20px;
+  width: 350px; /* กำหนดความกว้างหน้าต่างแชทลอยตัว */
+  height: 500px !important; /* กำหนดความสูง */
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* ซ่อนแชทเมื่อไม่ได้กดเปิด */
+#screen-chat.hidden {
+  display: none !important;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  pointer-events: none;
+}
+
+/* 2. ปุ่มลอยเปิด/ปิดแชท (Floating Action Button) */
+.chat-fab {
+  position: fixed;
+  bottom: 87px;
+  right: 20px;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  color: white;
+  font-size: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(76,175,80,0.4);
+  cursor: pointer;
+  z-index: 1000;
+  border: none;
+  transition: all var(--transition);
+}
+
+.chat-fab:hover {
+  transform: scale(1.05) translateY(-2px);
+  box-shadow: 0 6px 20px rgba(76,175,80,0.5);
+}
+
+.chat-fab:active {
+  transform: scale(0.95);
+}
+
+/* เพิ่มเติม: สำหรับการเปิดในสมาร์ทโฟนทั่วไป ให้แชทแสดงผลเต็มหน้าจอ */
+@media (max-width: 480px) {
+  #screen-chat {
+    width: calc(100% - 32px);
+    left: 16px;
+    right: 16px;
+    bottom: 85px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     PHONE 1 : LOGIN
+============================================================ -->
+<div id="phone-wrapper-1" style="display:block;">
+<div class="phone">
+  <div class="screen">
+    <div class="login-page">
+      <div class="login-logo">🐾</div>
+      <div class="login-brand">EATDY</div>
+      <p class="login-tagline">หาอาหารดีๆ ใกล้คุณ</p>
+
+      <div style="width:100%; background:var(--surface); border-radius:var(--radius-xl); padding:24px; box-shadow:var(--shadow-md);">
+        <p style="text-align:center; font-size:16px; font-weight:800; margin-bottom:20px;">🐾 ยินดีต้อนรับ</p>
+        <p style="text-align:center; font-size:13px; color:var(--text-secondary); margin-bottom:20px;">ค้นพบร้านอาหารดีๆ รอบตัวคุณ</p>
+
+        <div class="form-group">
+          <input class="form-input" type="email" placeholder="อีเมล">
+        </div>
+        <div class="form-group">
+          <input class="form-input" type="password" placeholder="รหัสผ่าน">
+        </div>
+
+        <button class="btn btn-primary btn-full" onclick="showPhone(2)">เข้าสู่ระบบ</button>
+
+        <div class="divider-text"><span>หรือเข้าสู่ระบบด้วย</span></div>
+
+        <button class="social-btn" onclick="showPhone(2)">🔵 เข้าสู่ระบบด้วย Google</button>
+
+        <p style="text-align:center; font-size:13px; color:var(--text-secondary); margin-top:14px;">
+          ยังไม่มีบัญชี? <span style="color:var(--primary); font-weight:700; cursor:pointer;" onclick="showPhone(2)">สร้างบัญชี</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="phone-label">Login</div>
+</div>
+
+<!-- ============================================================
+     PHONE 2 : ONBOARDING
+============================================================ -->
+<div id="phone-wrapper-2" style="display:none;">
+<div class="phone">
+  <div class="screen">
+    <div class="onboard-page">
+
+      <!-- Step indicator -->
+      <div class="onboard-progress">
+        <div class="progress-dot done" id="od1"></div>
+        <div class="progress-dot" id="od2"></div>
+        <div class="progress-dot" id="od3"></div>
+        <div class="progress-dot" id="od4"></div>
+        <div class="progress-dot" id="od5"></div>
+      </div>
+
+      <!-- STEP 1 : Buddy -->
+      <div class="onboard-step active" id="ob-step1">
+        <div class="onboard-title">🐾 เลือกบัดดี้ของคุณ</div>
+        <div class="onboard-subtitle">บัดดี้คนนี้จะอยู่กับคุณตลอดการเดินทาง!</div>
+        <div class="buddy-grid">
+          <div class="buddy-card selected" onclick="selectBuddy(this)">
+            <span class="buddy-emoji">🐶</span>
+            <div class="buddy-name">ป็อปปี้</div>
+            <div class="buddy-trait">ร่าเริง & กระตือรือร้น</div>
+          </div>
+          <div class="buddy-card" onclick="selectBuddy(this)">
+            <span class="buddy-emoji">🐱</span>
+            <div class="buddy-name">มิโล</div>
+            <div class="buddy-trait">ฉลาด & วิเคราะห์เก่ง</div>
+          </div>
+          <div class="buddy-card" onclick="selectBuddy(this)">
+            <span class="buddy-emoji">🐰</span>
+            <div class="buddy-name">โคโค่</div>
+            <div class="buddy-trait">น่ารัก & ให้กำลังใจ</div>
+          </div>
+          <div class="buddy-card" onclick="selectBuddy(this)">
+            <span class="buddy-emoji">🦊</span>
+            <div class="buddy-name">ฟ็อกซี่</div>
+            <div class="buddy-trait">เฉลียวฉลาด & ตรงไปตรงมา</div>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-full" onclick="nextObStep(1,2)">ถัดไป →</button>
+      </div>
+
+      <!-- STEP 2 : Name & Gender -->
+      <div class="onboard-step" id="ob-step2">
+        <div class="onboard-title">👋 เรียกคุณว่าอะไรดี?</div>
+        <div class="onboard-subtitle">ข้อมูลนี้ช่วยให้บัดดี้คุยกับคุณได้เป็นกันเอง</div>
+        <div class="form-group">
+          <input class="form-input" type="text" placeholder="ชื่อเล่น" id="ob-nickname" value="อเล็กซ์">
+        </div>
+
+        <div style="margin:20px 0 10px;"><strong style="font-size:14px;">🧑‍🎓 ข้อมูลส่วนตัว</strong></div>
+        <p style="font-size:12px; color:var(--text-secondary); margin-bottom:12px;">ใช้คำนวณคำแนะนำที่เหมาะกับคุณ</p>
+
+        <div style="display:flex; gap:10px; margin-bottom:16px;">
+          <div class="channel-card selected" style="flex:1; border-radius:var(--radius-md); padding:12px;" onclick="selectGender(this,'m')">
+            <span class="channel-icon">👨</span>
+            <span class="channel-name">ชาย</span>
+            <span class="check-badge">✓</span>
+          </div>
+          <div class="channel-card" style="flex:1; border-radius:var(--radius-md); padding:12px;" onclick="selectGender(this,'f')">
+            <span class="channel-icon">👩</span>
+            <span class="channel-name">หญิง</span>
+            <span class="check-badge">✓</span>
+          </div>
+        </div>
+
+        <div style="margin-bottom:16px;">
+          <div class="section-title">อายุ</div>
+          <div class="range-wrap">
+            <input type="range" min="15" max="60" value="21" oninput="updateRange(this,'ob-age-val')">
+          </div>
+          <div class="range-value"><span id="ob-age-val">21</span> <span class="range-unit">ปี</span></div>
+        </div>
+
+        <div style="display:flex; gap:12px; margin-bottom:20px;">
+          <div style="flex:1;">
+            <div class="section-title">น้ำหนัก</div>
+            <input type="range" min="40" max="120" value="65" oninput="updateRange(this,'ob-wt-val')">
+            <div style="text-align:center; font-size:16px; font-weight:800; color:var(--primary-dark);"><span id="ob-wt-val">65</span> กก.</div>
+          </div>
+          <div style="flex:1;">
+            <div class="section-title">ส่วนสูง</div>
+            <input type="range" min="140" max="200" value="172" oninput="updateRange(this,'ob-ht-val')">
+            <div style="text-align:center; font-size:16px; font-weight:800; color:var(--primary-dark);"><span id="ob-ht-val">172</span> ซม.</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-secondary" onclick="nextObStep(2,1)">← ย้อนกลับ</button>
+          <button class="btn btn-primary" style="flex:1;" onclick="nextObStep(2,3)">ถัดไป →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3 : Goal -->
+      <div class="onboard-step" id="ob-step3">
+        <div class="onboard-title">🎯 เป้าหมายสุขภาพ</div>
+        <div class="onboard-subtitle">เราจะปรับคำแนะนำให้เหมาะกับเป้าหมาย</div>
+        <div class="goal-list">
+          <div class="goal-item" onclick="selectGoal(this)">
+            <span class="goal-icon">🏃</span>
+            <div class="goal-text">
+              <div class="goal-name">ลดน้ำหนัก / ลดไขมัน</div>
+              <div class="goal-desc">คุมแคลอรี่ เพิ่มโปรตีน</div>
+            </div>
+          </div>
+          <div class="goal-item selected" onclick="selectGoal(this)">
+            <span class="goal-icon">⚖️</span>
+            <div class="goal-text">
+              <div class="goal-name">ควบคุมน้ำหนัก</div>
+              <div class="goal-desc">รักษารูปร่างปัจจุบัน</div>
+            </div>
+          </div>
+          <div class="goal-item" onclick="selectGoal(this)">
+            <span class="goal-icon">💪</span>
+            <div class="goal-text">
+              <div class="goal-name">เพิ่มกล้ามเนื้อ</div>
+              <div class="goal-desc">โปรตีนสูง ฟิตหุ่น</div>
+            </div>
+          </div>
+          <div class="goal-item" onclick="selectGoal(this)">
+            <span class="goal-icon">🥗</span>
+            <div class="goal-text">
+              <div class="goal-name">กินสมดุล</div>
+              <div class="goal-desc">กินดี ครบหมู่ หลากหลาย</div>
+            </div>
+          </div>
+          
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="btn btn-secondary" onclick="nextObStep(3,2)">← ย้อนกลับ</button>
+          <button class="btn btn-primary" style="flex:1;" onclick="nextObStep(3,4)">ถัดไป →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4 : Activity & Budget -->
+      <div class="onboard-step" id="ob-step4">
+        <div class="onboard-title">🏋️ กิจกรรม & งบประมาณ</div>
+        <div class="onboard-subtitle">ช่วยให้แนะนำได้ตรงกว่า</div>
+
+        <div class="section-title">ระดับกิจกรรม</div>
+        <div class="goal-list" style="margin-bottom:20px;">
+          <div class="goal-item" onclick="selectGoal(this)"><span class="goal-icon">🛋️</span><div class="goal-text"><div class="goal-name">ไม่ออกกำลังกาย</div><div class="goal-desc">นั่งทำงาน เรียน เป็นส่วนใหญ่</div></div></div>
+          <div class="goal-item selected" onclick="selectGoal(this)"><span class="goal-icon">🚶</span><div class="goal-text"><div class="goal-name">1-2 ครั้ง/สัปดาห์</div><div class="goal-desc">เบาๆ พอประมาณ</div></div></div>
+          <div class="goal-item" onclick="selectGoal(this)"><span class="goal-icon">🏃</span><div class="goal-text"><div class="goal-name">3-5 ครั้ง/สัปดาห์</div><div class="goal-desc">ออกกำลังกายสม่ำเสมอ</div></div></div>
+          <div class="goal-item" onclick="selectGoal(this)"><span class="goal-icon">💪</span><div class="goal-text"><div class="goal-name">ทุกวัน / นักกีฬา</div><div class="goal-desc">ออกกำลังกายเป็นประจำ</div></div></div>
+        </div>
+
+        <div class="section-title">งบอาหารต่อวัน</div>
+        <input type="range" min="50" max="500" value="150" step="10" oninput="updateRange(this,'ob-budget-val')">
+        <div class="range-value">฿<span id="ob-budget-val">150</span> <span class="range-unit">บาทต่อวัน</span></div>
+
+        <div style="display:flex; gap:10px; margin-top:20px;">
+          <button class="btn btn-secondary" onclick="nextObStep(4,3)">← ย้อนกลับ</button>
+          <button class="btn btn-primary" style="flex:1;" onclick="nextObStep(4,5)">ถัดไป →</button>
+        </div>
+      </div>
+
+      <!-- STEP 5 : Summary -->
+      <div class="onboard-step" id="ob-step5">
+        <div class="onboard-title">✨ โปรไฟล์สุขภาพของคุณ</div>
+        <div class="onboard-subtitle">ข้อมูลที่บัดดี้จะใช้แนะนำคุณ</div>
+
+        <div class="card" style="margin-bottom:16px;">
+          <div style="display:flex; align-items:center; gap:14px; margin-bottom:14px;">
+            <div style="font-size:48px;">🐶</div>
+            <div>
+              <div style="font-size:16px; font-weight:800;">ป็อปปี้ & อเล็กซ์</div>
+              <div style="font-size:13px; color:var(--text-secondary);">เพื่อนที่แสนดีของคุณพร้อมแล้ว!</div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px;">
+            <div style="text-align:center; background:var(--primary-bg); border-radius:var(--radius-md); padding:12px;">
+              <div style="font-size:22px; font-weight:900; color:var(--primary-dark);">22.0</div>
+              <div style="font-size:10px; color:var(--text-secondary);">ค่า BMI</div>
+              <div style="font-size:11px; color:var(--primary); font-weight:700; margin-top:2px;">น้ำหนักดี ✨</div>
+            </div>
+            <div style="text-align:center; background:var(--surface-3); border-radius:var(--radius-md); padding:12px;">
+              <div style="font-size:22px; font-weight:900; color:var(--text-primary);">~78ก.</div>
+              <div style="font-size:10px; color:var(--text-secondary);">โปรตีน/วัน</div>
+            </div>
+          </div>
+          <div style="margin-top:12px; background:var(--primary-bg); border-radius:var(--radius-md); padding:12px; font-size:12px; color:var(--primary-dark); line-height:1.6;">
+            💡 ดื่มน้ำ 6-8 แก้วต่อวัน กินผักหลากหลาย และเลือกโปรตีนดี เช่น ปลา ไข่ เต้าหู้
+          </div>
+        </div>
+
+        <button class="btn btn-primary btn-full" style="font-size:16px; padding:16px;" onclick="showPhone(3)">
+          🚀 เริ่มต้นเลย!
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="phone-label">Onboarding</div>
+</div>
+
+<!-- ============================================================
+     PHONE 3 : HOME
+============================================================ -->
+<div id="phone-wrapper-3" style="display:none;">
+<div class="phone" id="phone-home">
+  <div class="screen" id="screen-home">
+
+    <!-- Home Header -->
+    <div class="home-header">
+      <div class="header-top">
+        <div>
+          <div class="header-greeting">สวัสดีตอนเช้า ☀️</div>
+          <div class="header-name">อเล็กซ์!</div>
+          <div class="header-location">📍 มทส • เรียนรวม 2 ▾</div>
+        </div>
+        <div class="header-right">
+          <button class="notif-btn" onclick="showPage('notif')">
+            🔔
+            <span class="notif-dot"></span>
+          </button>
+          <div class="score-pill">82 คะแนน = 0.82 Point</div>
+        </div>
+      </div>
+
+      <div class="buddy-banner">
+        <div class="buddy-avatar">🐶</div>
+        <div class="buddy-message" style="flex:1;">
+          <div class="buddy-msg-title">ป็อปปี้ พร้อมช่วยแล้ว!</div>
+          <div class="buddy-msg-text">วันนี้คุณยังกินผักไม่พอ มีร้าน Healthy Bites ห่าง 320 ม. — เดิน 4 นาทีเอง!</div>
+          <div class="buddy-action-btns">
+            <button class="buddy-btn buddy-btn-primary" onclick="showPage('restaurant-detail')">ดูร้าน →</button>
+            <button class="buddy-btn buddy-btn-secondary">ไว้ทีหลัง</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Home Content -->
+    <div class="home-content">
+
+      <!-- Search -->
+      <div class="search-bar">
+        <span>🔍</span>
+        <input type="text" placeholder="ค้นหาร้าน, เมนู...">
+        <span style="font-size:18px; cursor:pointer;" onclick="showPage('settings')">⚙️</span>
+      </div>
+
+      <!-- Manual Meal Log Button -->
+      <button class="manual-meal-btn" onclick="openManualMealModal()">
+        ✍️ บันทึกอาหารเอง
+      </button>
+
+
+      <!-- Tag bar -->
+      <div class="tag-bar">
+        <div class="chip active">ทั้งหมด</div>
+        <div class="chip">โปรตีนสูง</div>
+        <div class="chip">น้ำตาลต่ำ</div>
+        <div class="chip">ไขมันต่ำ</div>
+        <div class="chip">ไฟเบอร์สูง</div>
+        <div class="chip">คาร์บต่ำ</div>
+        <div class="chip">อิ่มนาน</div>
+        <div class="chip">มื้อดึก</div>
+      </div>
+
+      <!-- AI Recommendation Banner -->
+      <div style="background:linear-gradient(135deg,#1a1a2e,#16213e); border-radius:var(--radius-lg); padding:16px; color:white; cursor:pointer;" onclick="showPage('restaurant-detail')">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+          <span style="font-size:20px;">🤖</span>
+          <span style="font-size:13px; font-weight:700; opacity:.85;">บัดดี้แนะนำให้คุณ ✨</span>
+          <span style="margin-left:auto; font-size:12px; opacity:.6;">›</span>
+        </div>
+        <p style="font-size:12px; opacity:.85; line-height:1.5;">วันนี้คุณยังกินผักไม่พอ มีร้าน Healthy Bites ห่าง 320 ม. — เดิน 4 นาทีเอง!</p>
+      </div>
+
+      <!-- Food DNA -->
+      <div class="dna-card">
+        <div class="dna-title">โภชนาการของคุณวันนี้</div>
+        <div class="dna-score">82</div>
+        <div class="dna-subtitle">คะแนนความหลากหลาย · สัปดาห์นี้คุณกิน ไก่ 5 ครั้ง ลองโปรตีนอื่นดู</div>
+        <div class="dna-bars">
+          <div class="dna-bar-row">
+            <span class="dna-bar-label">🍗 โปรตีน</span>
+            <div class="dna-bar-track"><div class="dna-bar-fill" style="width:85%; background:#64FF64;"></div></div>
+            <span class="dna-bar-val">102/120ก.</span>
+          </div>
+          <div class="dna-bar-row">
+            <span class="dna-bar-label">🥬 ผัก</span>
+            <div class="dna-bar-track"><div class="dna-bar-fill" style="width:45%; background:#FFD740;"></div></div>
+            <span class="dna-bar-val">180/400ก.</span>
+          </div>
+          <div class="dna-bar-row">
+            <span class="dna-bar-label">🍎 ผลไม้</span>
+            <div class="dna-bar-track"><div class="dna-bar-fill" style="width:30%; background:#FF6B6B;"></div></div>
+            <span class="dna-bar-val">60/200ก.</span>
+          </div>
+          <div class="dna-bar-row">
+            <span class="dna-bar-label">🌾 ธัญพืช</span>
+            <div class="dna-bar-track"><div class="dna-bar-fill" style="width:69%; background:#64B5F6;"></div></div>
+            <span class="dna-bar-val">33/48ก.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Section: Popular -->
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+          <h3>🔥 ร้านยอดนิยมใกล้คุณ</h3>
+          <span style="font-size:12px; color:var(--primary); font-weight:700; cursor:pointer;" onclick="showPage('map')">ดูทั้งหมด</span>
+        </div>
+        <div class="h-scroll">
+          <!-- Restaurant Card 1 -->
+          <div class="restaurant-card" style="min-width:180px;" onclick="showPage('restaurant-detail')">
+            <div class="restaurant-img">
+              🥗
+              <div class="restaurant-promo">ลด 15%</div>
+            </div>
+            <div class="restaurant-body">
+              <div class="restaurant-name">Healthy Bites</div>
+              <div class="restaurant-meta">
+                <span class="restaurant-rating">⭐ 4.8</span>
+                <span class="restaurant-dist">📍 320ม.</span>
+              </div>
+            </div>
+          </div>
+          <!-- Restaurant Card 2 -->
+          <div class="restaurant-card" style="min-width:180px;">
+            <div class="restaurant-img">🍱</div>
+            <div class="restaurant-body">
+              <div class="restaurant-name">Bowl & Soul</div>
+              <div class="restaurant-meta">
+                <span class="restaurant-rating">⭐ 4.6</span>
+                <span class="restaurant-dist">📍 450ม.</span>
+              </div>
+            </div>
+          </div>
+          <!-- Restaurant Card 3 -->
+          <div class="restaurant-card" style="min-width:180px;">
+            <div class="restaurant-img">🍜</div>
+            <div class="restaurant-body">
+              <div class="restaurant-name">ก๋วยเตี๋ยวป้าแดง</div>
+              <div class="restaurant-meta">
+                <span class="restaurant-rating">⭐ 4.5</span>
+                <span class="restaurant-dist">📍 200ม.</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /home-content -->
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <button class="nav-item active" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
+      <button class="nav-item" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
+      <button class="nav-item" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
+      <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
+      
+    </div>
+<button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
+  </div><!-- /screen-home (home page) -->
+
+  <!-- ============================================================
+       PAGE: RESTAURANT DETAIL
+  ============================================================ -->
+  <div class="screen hidden" id="screen-restaurant-detail">
+
+    <div class="restaurant-hero">
+      🥗
+      <button class="back-btn" style="position:absolute; top:16px; left:16px;" onclick="showPage('home')">←</button>
+      <div class="promo-banner">🎉 ลด 15% นักศึกษา</div>
+    </div>
+
+    <!-- Info -->
+    <div class="restaurant-info">
+      <h2 id="rest-detail-name">Healthy Bites</h2>
+      <div style="display:flex; align-items:center; gap:10px; margin:6px 0;">
+        <span class="badge badge-green">🟢 เปิดอยู่</span>
+        <span style="font-size:12px; color:var(--text-secondary);">ปิด 22:00 น.</span>
+      </div>
+      <p style="font-size:13px; color:var(--text-secondary); line-height:1.5;">ร้านอาหารเพื่อสุขภาพ เน้นเมนูโปรตีนสูง ผักสด ไม่ใส่ผงชูรส</p>
+      <div class="restaurant-stats">
+        <div class="restaurant-stat"><div class="stat-val">⭐ 4.8</div><div class="stat-label">248 รีวิว</div></div>
+        <div class="restaurant-stat"><div class="stat-val">📍 320ม.</div><div class="stat-label">เดิน 4 นาที</div></div>
+        <div class="restaurant-stat"><div class="stat-val">฿85-150</div><div class="stat-label">ราคา</div></div>
+        <div class="restaurant-stat"><div class="stat-val">🚲 1 นาที</div><div class="stat-label">จักรยาน</div></div>
+      </div>
+      <button class="btn btn-outline btn-full" style="margin-top:10px;" onclick="showPage('map')">🗺️ ดูบนแผนที่ & เส้นทาง</button>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tab-bar" id="rest-tabs">
+      <div class="tab-item active" onclick="switchTab('menu')">เมนู</div>
+      <div class="tab-item" onclick="switchTab('review')">รีวิว</div>
+    </div>
+
+    <!-- Tab: Menu -->
+    <div id="tab-menu">
+      <div class="menu-grid">
+        <div class="menu-item" onclick="showPage('menu-detail')">
+          <div class="menu-emoji-box">🥗</div>
+          <div class="menu-item-info">
+            <div class="menu-item-name">สลัดอกไก่ย่าง</div>
+            <div class="menu-item-desc">อกไก่ย่างไร้หนัง ผักสด ซอสญี่ปุ่น</div>
+            <div class="menu-item-tags">
+              <span class="badge badge-green">โปรตีนสูง</span>
+              <span class="badge badge-green">ไขมันต่ำ</span>
+            </div>
+          </div>
+          <div class="menu-item-price">฿95</div>
+        </div>
+        <div class="menu-item" onclick="showPage('menu-detail')">
+          <div class="menu-emoji-box">🍚</div>
+          <div class="menu-item-info">
+            <div class="menu-item-name">ข้าวกล้องไก่ต้ม</div>
+            <div class="menu-item-desc">ข้าวกล้อง ไก่ต้มฉีก ผักลวก</div>
+            <div class="menu-item-tags">
+              <span class="badge badge-green">โปรตีนสูง</span>
+              <span class="badge badge-blue">อิ่มนาน</span>
+            </div>
+          </div>
+          <div class="menu-item-price">฿85</div>
+        </div>
+        <div class="menu-item" onclick="showPage('menu-detail')">
+          <div class="menu-emoji-box">🥣</div>
+          <div class="menu-item-info">
+            <div class="menu-item-name">โอ๊ตมีลหน้าผลไม้</div>
+            <div class="menu-item-desc">โอ๊ตมีล กล้วย บลูเบอร์รี่ โยเกิร์ต</div>
+            <div class="menu-item-tags">
+              <span class="badge badge-green">ไฟเบอร์สูง</span>
+              <span class="badge badge-orange">น้ำตาลปานกลาง</span>
+            </div>
+          </div>
+          <div class="menu-item-price">฿75</div>
+        </div>
+        <div class="menu-item">
+          <div class="menu-emoji-box">🍳</div>
+          <div class="menu-item-info">
+            <div class="menu-item-name">ไข่ออมเล็ตผัก</div>
+            <div class="menu-item-desc">ไข่ 3 ฟอง ผักรวม เห็ดหอม</div>
+            <div class="menu-item-tags">
+              <span class="badge badge-green">โปรตีนสูง</span>
+              <span class="badge badge-green">คาร์บต่ำ</span>
+            </div>
+          </div>
+          <div class="menu-item-price">฿80</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Nutrition (hidden) -->
+    <div id="tab-nutrition" class="nutrition-tab hidden">
+      <div class="nutrition-avg-card">
+        <h3 style="margin-bottom:4px;">ข้อมูลโภชนาการเฉลี่ยต่อจาน</h3>
+        <p style="font-size:12px; color:var(--text-secondary);">เฉลี่ยจากเมนูทั้งหมด</p>
+        <div class="nutrition-grid">
+          <div class="nutrition-cell"><div class="n-val">28</div><div class="n-unit">ก.</div><div class="n-label">โปรตีน</div></div>
+          <div class="nutrition-cell"><div class="n-val">35</div><div class="n-unit">ก.</div><div class="n-label">คาร์บ</div></div>
+          <div class="nutrition-cell"><div class="n-val">12</div><div class="n-unit">ก.</div><div class="n-label">ไขมัน</div></div>
+          <div class="nutrition-cell"><div class="n-val">5</div><div class="n-unit">ก.</div><div class="n-label">น้ำตาล</div></div>
+          <div class="nutrition-cell"><div class="n-val">8</div><div class="n-unit">ก.</div><div class="n-label">ไฟเบอร์</div></div>
+          <div class="nutrition-cell"><div class="n-val">420</div><div class="n-unit">มก.</div><div class="n-label">โซเดียม</div></div>
+        </div>
+        <div style="margin-top:12px; padding:10px; background:var(--primary-bg); border-radius:var(--radius-sm); font-size:12px; color:var(--primary-dark);">
+          ✅ เหมาะกับ: ลดน้ำหนัก เพิ่มกล้ามเนื้อ
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: Review (hidden) -->
+    <div id="tab-review" class="review-tab hidden">
+      <div class="review-summary">
+        <div class="review-big-score">4.8</div>
+        <div>
+          <div style="display:flex; gap:4px; margin-bottom:8px;">⭐⭐⭐⭐⭐</div>
+          <div style="font-size:12px; color:var(--text-secondary);">248 รีวิว</div>
+        </div>
+        <div class="review-bars" style="flex:1;">
+          <div class="review-bar-row"><span class="review-bar-label">5★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:82%;"></div></div></div>
+          <div class="review-bar-row"><span class="review-bar-label">4★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:12%;"></div></div></div>
+          <div class="review-bar-row"><span class="review-bar-label">3★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:4%;"></div></div></div>
+          <div class="review-bar-row"><span class="review-bar-label">2★</span><div class="review-bar-track"><div class="review-bar-fill" style="width:2%;"></div></div></div>
+        </div>
+      </div>
+      <button class="write-review-btn">✍️ เขียนรีวิว</button>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
+      <button class="nav-item" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
+      <button class="nav-item" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
+      <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
+      
+    </div>
+<button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
+  </div><!-- /screen-restaurant-detail -->
+
+  <!-- ============================================================
+       PAGE: MENU DETAIL  ← ORDER SECTION ADDED
+  ============================================================ -->
+  <div class="screen hidden" id="screen-menu-detail">
+
+    <div class="menu-detail-hero">
+      🥗
+      <button class="back-btn" style="position:absolute; top:16px; left:16px;" onclick="showPage('restaurant-detail')">←</button>
+    </div>
+
+    <div class="menu-detail-body">
+
+      <!-- Header -->
+      <div class="menu-detail-header">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <div class="menu-detail-name">สลัดอกไก่ย่าง</div>
+            <div class="menu-detail-restaurant">Healthy Bites</div>
+          </div>
+          <div class="menu-detail-price">฿95</div>
+        </div>
+        <div class="menu-detail-desc">อกไก่ย่างไร้หนัง ผักสลัดสด มะเขือเทศ ไข่ต้ม ซอสน้ำใสสไตล์ญี่ปุ่น โปรตีนสูง ไขมันต่ำ เหมาะกับคนคุมน้ำหนัก</div>
+      </div>
+
+      <!-- Health Score -->
+      <div class="health-score-bar">
+        <div class="score-info">
+          <div class="score-title">คะแนนสุขภาพดีเยี่ยม 🌟</div>
+          <div class="score-desc">โปรตีนสูง ไขมันต่ำ ผักเยอะ เหมาะกับเป้าหมายของคุณ</div>
+        </div>
+      </div>
+
+      <!-- Nutrient tags -->
+      <div class="chip-group" style="margin-bottom:14px;">
+        <div class="chip active" style="cursor:default;">โปรตีนสูง 32ก.</div>
+        <div class="chip active" style="cursor:default;">ไขมันต่ำ 8ก.</div>
+        <div class="chip active" style="cursor:default;">ไฟเบอร์ 6ก.</div>
+        <div class="chip" style="cursor:default; border-color:var(--secondary); color:#E65100;">โซเดียม 380มก.</div>
+      </div>
+
+      <!-- Nutrition Table -->
+      <h3 style="margin-bottom:8px;">📊 ข้อมูลโภชนาการ</h3>
+      <div class="card" style="padding:0;">
+        <div class="nutrition-full-table" style="padding:0 16px;">
+          <div class="nutrition-row"><span class="n-name">พลังงาน</span><span class="n-amount">320 kcal</span></div>
+          <div class="nutrition-row"><span class="n-name">โปรตีน</span><span class="n-amount">32 ก.</span></div>
+          <div class="nutrition-row"><span class="n-name">คาร์โบไฮเดรต</span><span class="n-amount">18 ก.</span></div>
+          <div class="nutrition-row"><span class="n-name">ไขมัน</span><span class="n-amount">8 ก.</span></div>
+          <div class="nutrition-row"><span class="n-name">น้ำตาล</span><span class="n-amount">4 ก.</span></div>
+          <div class="nutrition-row"><span class="n-name">ไฟเบอร์</span><span class="n-amount">6 ก.</span></div>
+          <div class="nutrition-row"><span class="n-name">โซเดียม</span><span class="n-amount">380 มก.</span></div>
+        </div>
+      </div>
+
+      <!-- ============================================================
+           ORDER SECTION  ← NEW FEATURE
+      ============================================================ -->
+      <div class="order-section" style="margin-top:20px;">
+        <div class="order-section-header">
+          🛒 สั่งซื้ออาหาร
+        </div>
+        <div class="order-section-body">
+
+          <!-- Quantity -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div>
+              <div style="font-size:13px; font-weight:700;">จำนวน</div>
+              <div style="font-size:11px; color:var(--text-secondary);">สลัดอกไก่ย่าง</div>
+            </div>
+            <div class="qty-selector">
+              <button class="qty-btn" onclick="changeQty(-1)">−</button>
+              <span class="qty-value" id="qty-display">1</span>
+              <button class="qty-btn" onclick="changeQty(1)">+</button>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Channel Selector -->
+          <div style="margin:16px 0;">
+            <div class="channel-section-title">เลือกช่องทางการรับอาหาร</div>
+            <div class="channel-selector">
+              <div class="channel-card" id="ch-delivery" onclick="selectChannel('delivery')">
+                <span class="channel-icon">🛵</span>
+                <span class="channel-name">Delivery</span>
+                <span class="channel-desc">ส่งถึงที่คุณอยู่</span>
+                <span class="check-badge">✓</span>
+              </div>
+              <div class="channel-card selected" id="ch-pickup" onclick="selectChannel('pickup')">
+                <span class="channel-icon">🏃</span>
+                <span class="channel-name">รับที่ร้าน</span>
+                <span class="channel-desc">ไปรับด้วยตัวเอง</span>
+                <span class="check-badge">✓</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Delivery Platform (shown when delivery selected) -->
+          <div id="delivery-platform-section" class="hidden">
+            <div class="channel-section-title">เลือกแพลตฟอร์มส่งอาหาร</div>
+            <div class="platform-selector">
+              <div class="platform-item" id="plat-grab" onclick="selectPlatform('GrabFood','plat-grab')">
+                <div class="platform-left">
+                  <div class="platform-logo" style="background:#00B14F;">G</div>
+                  <div class="platform-info">
+                    <div class="platform-name">GrabFood</div>
+                    <div class="platform-meta">⏱️ ส่ง 25 นาที · ค่าส่ง ฿10</div>
+                  </div>
+                </div>
+                <div class="platform-radio"></div>
+              </div>
+              <div class="platform-item" id="plat-lineman" onclick="selectPlatform('LINE MAN','plat-lineman')">
+                <div class="platform-left">
+                  <div class="platform-logo" style="background:#00C300;">L</div>
+                  <div class="platform-info">
+                    <div class="platform-name">LINE MAN</div>
+                    <div class="platform-meta">⏱️ ส่ง 30 นาที · ค่าส่ง ฿15</div>
+                  </div>
+                </div>
+                <div class="platform-radio"></div>
+              </div>
+              <div class="platform-item" id="plat-panda" onclick="selectPlatform('Foodpanda','plat-panda')">
+                <div class="platform-left">
+                  <div class="platform-logo" style="background:#D70F64;">F</div>
+                  <div class="platform-info">
+                    <div class="platform-name">Foodpanda</div>
+                    <div class="platform-meta">⏱️ ส่ง 20 นาที · ค่าส่ง ฿12</div>
+                  </div>
+                </div>
+                <div class="platform-radio"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pickup Info (shown when pickup selected) -->
+          <div id="pickup-info-section">
+            <div class="pickup-info">
+              <span class="pickup-icon">📍</span>
+              <div class="pickup-text">
+                <div class="pickup-title">Healthy Bites</div>
+                <div class="pickup-desc">320 ม. · เดิน 4 นาที · เปิด 08:00-22:00</div>
+              </div>
+              <button class="btn btn-outline" style="padding:6px 12px; font-size:12px;" onclick="showPage('map')">นำทาง</button>
+            </div>
+
+            <!-- Pickup Total Price + Map Button ← NEW -->
+            <div class="pickup-total-row">
+              <span class="pickup-total-label">ราคาอาหารสุทธิ</span>
+              <span class="pickup-total-value">฿<span id="pickup-total-price">81</span></span>
+            </div>
+            <button class="btn-map-route" id="map-route-btn" onclick="showPage('map')">
+              🗺️ ดูแผนที่ร้านและเส้นทาง
+            </button>
+          </div>
+
+          <div class="divider" style="margin:16px 0;"></div>
+
+          <!-- Order Summary -->
+          <div id="order-summary-section" class="hidden">
+            <div class="channel-section-title">สรุปรายการ</div>
+            <div class="order-summary-row">
+              <span class="summary-label">สลัดอกไก่ย่าง × <span id="summary-qty">1</span></span>
+              <span class="summary-value">฿<span id="summary-subtotal">95</span></span>
+            </div>
+            <div class="order-summary-row" id="delivery-fee-row" style="display:none;">
+              <span class="summary-label">ค่าจัดส่ง (<span id="summary-platform">-</span>)</span>
+              <span class="summary-value">฿<span id="summary-delivery-fee">0</span></span>
+            </div>
+            <div class="order-summary-row">
+              <span class="summary-label">ส่วนลดนักศึกษา 15%</span>
+              <span class="summary-value" style="color:var(--primary);">-฿<span id="summary-discount">14</span></span>
+            </div>
+            <div class="order-summary-total">
+              <span>ยอดรวม</span>
+              <span class="total-price">฿<span id="summary-total">81</span></span>
+            </div>
+          </div>
+
+          <!-- Order Button -->
+          <div class="order-btn-wrap hidden" id="order-btn-wrap">
+            <button class="btn-order" id="order-btn" onclick="placeOrder()">
+              🛒 สั่งซื้อเลย!
+            </button>
+            <p style="text-align:center; font-size:11px; color:var(--text-hint); margin-top:8px;">
+              ร้านจะได้รับคำสั่งซื้อของคุณทันที
+            </p>
+          </div>
+
+        </div>
+      </div><!-- /order-section -->
+
+    </div><!-- /menu-detail-body -->
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
+      <button class="nav-item" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
+      <button class="nav-item" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
+      <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
+      
+    </div>
+<button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
+  </div><!-- /screen-menu-detail -->
+
+  <!-- ============================================================
+       PAGE: MAP
+  ============================================================ -->
+  <div class="screen hidden" id="screen-map">
+
+    <div class="page-header">
+      <button class="back-btn" onclick="showPage('home')">←</button>
+      <h2 style="flex:1;">🗺️ แผนที่ร้านอาหาร</h2>
+      <button class="notif-btn" style="background:var(--surface-3); color:var(--text-primary);" onclick="showPage('notif')">🔔</button>
+    </div>
+
+    <!-- Map -->
+    <div class="map-container">
+      <div class="map-grid"></div>
+      <!-- Roads -->
+      <div class="map-road-h" style="top:40%; left:0; right:0;"></div>
+      <div class="map-road-h" style="top:70%; left:0; right:0;"></div>
+      <div class="map-road-v" style="left:35%; top:0; bottom:0;"></div>
+      <div class="map-road-v" style="left:68%; top:0; bottom:0;"></div>
+
+      <!-- Pins -->
+      <div class="map-pin" style="top:25%; left:50%;" onclick="goToRestaurantDetail('Healthy Bites')">
+        <div class="map-pin-bubble green">🥗 Healthy Bites</div>
+        <div class="map-pin-tail" style="border-top-color:var(--primary);"></div>
+      </div>
+      <div class="map-pin" style="top:50%; left:25%;" onclick="goToRestaurantDetail('Bowl & Soul')">
+        <div class="map-pin-bubble orange">🍱 Bowl & Soul</div>
+        <div class="map-pin-tail" style="border-top-color:var(--secondary);"></div>
+      </div>
+      <div class="map-pin" style="top:35%; left:72%;" onclick="goToRestaurantDetail('ก๋วยเตี๋ยวป้าแดง')">
+        <div class="map-pin-bubble">🍜 ป้าแดง</div>
+        <div class="map-pin-tail"></div>
+      </div>
+
+      <!-- User -->
+      <div class="map-user-dot" style="top:55%; left:48%;"></div>
+
+      <!-- Controls -->
+      <div class="map-controls">
+        <div class="map-ctrl-btn">+</div>
+        <div class="map-ctrl-btn">−</div>
+        <div class="map-ctrl-btn">📍</div>
+      </div>
+
+    </div>
+
+    <!-- Filter -->
+    <div class="map-filter-bar">
+      <div class="chip active">ทั้งหมด</div>
+      <div class="chip">ใกล้ฉัน</div>
+      <div class="chip">โปรตีนสูง</div>
+      <div class="chip">ราคาประหยัด</div>
+      <div class="chip">เปิดตอนนี้</div>
+      <div class="chip">เปิดดึก</div>
+      <div class="chip">คะแนนสุขภาพสูง</div>
+    </div>
+
+    <!-- List -->
+    <div class="map-restaurant-list">
+      <div class="map-rest-item" onclick="goToRestaurantDetail('Healthy Bites')">
+        <div class="map-rest-emoji">🥗</div>
+        <div class="map-rest-info">
+          <div class="map-rest-name">Healthy Bites</div>
+          <div class="map-rest-meta">⭐ 4.8 · 📍 320ม. · 🟢 เปิดอยู่</div>
+        </div>
+      </div>
+      <div class="map-rest-item" onclick="goToRestaurantDetail('Bowl & Soul')">
+        <div class="map-rest-emoji">🍱</div>
+        <div class="map-rest-info">
+          <div class="map-rest-name">Bowl & Soul</div>
+          <div class="map-rest-meta">⭐ 4.6 · 📍 450ม. · 🟢 เปิดอยู่</div>
+        </div>
+      </div>
+      <div class="map-rest-item" onclick="goToRestaurantDetail('ก๋วยเตี๋ยวป้าแดง')">
+        <div class="map-rest-emoji">🍜</div>
+        <div class="map-rest-info">
+          <div class="map-rest-name">ก๋วยเตี๋ยวป้าแดง</div>
+          <div class="map-rest-meta">⭐ 4.5 · 📍 200ม. · 🟢 เปิดอยู่</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Map Popup -->
+    <div class="map-popup" id="map-popup">
+      <div class="popup-handle"></div>
+      <div style="display:flex; gap:12px; align-items:center; margin-bottom:12px;">
+        <div style="font-size:40px;">🥗</div>
+        <div>
+          <h3>Healthy Bites</h3>
+          <div style="font-size:12px; color:var(--text-secondary);">⭐ 4.8 · 🟢 เปิดอยู่</div>
+        </div>
+        <button style="margin-left:auto; background:none; border:none; font-size:18px; cursor:pointer;" onclick="hideMapPopup()">✕</button>
+      </div>
+      <div style="display:flex; gap:6px; margin-bottom:12px;">
+        <div style="flex:1; text-align:center; background:var(--surface-2); border-radius:var(--radius-md); padding:8px;">
+          <div style="font-size:12px; font-weight:700;">320 ม.</div>
+          <div style="font-size:10px; color:var(--text-secondary);">ระยะทาง</div>
+        </div>
+        <div style="flex:1; text-align:center; background:var(--surface-2); border-radius:var(--radius-md); padding:8px;">
+          <div style="font-size:12px; font-weight:700;">🚶 4 นาที</div>
+          <div style="font-size:10px; color:var(--text-secondary);">เดิน</div>
+        </div>
+        <div style="flex:1; text-align:center; background:var(--surface-2); border-radius:var(--radius-md); padding:8px;">
+          <div style="font-size:12px; font-weight:700;">🚲 1 นาที</div>
+          <div style="font-size:10px; color:var(--text-secondary);">จักรยาน</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:10px;">
+        <button class="btn btn-primary" style="flex:1;" onclick="goToRestaurantDetail('Healthy Bites')">เข้าชมร้าน</button>
+        <button class="btn btn-outline">🧭 นำทาง</button>
+      </div>
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
+      <button class="nav-item active" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
+      <button class="nav-item" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
+      <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
+      
+    </div>
+<button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
+  </div><!-- /screen-map -->
+
+  <!-- ============================================================
+       PAGE: AI CHAT
+  ============================================================ -->
+  <div class="screen hidden" id="screen-chat" style="display:flex; flex-direction:column; height:812px;">
+    <div class="status-bar">
+      <button class="back-btn" onclick="showPage('home')">←</button>
+    </div>
+    <div class="chat-header">
+      <div class="chat-avatar">
+        🐶
+        <div class="chat-online"></div>
+      </div>
+      <div class="chat-info">
+        <div class="chat-name">ป็อปปี้ (EATDY AI)</div>
+        <div class="chat-status">ออนไลน์ · พร้อมช่วย</div>
+      </div>
+      <button class="notif-btn" style="background:var(--surface-3); color:var(--text-primary);" onclick="showPage('notif')">🔔</button>
+    </div>
+
+    <div class="chat-messages" id="chat-msg-container">
+      <div class="msg-bubble bot">
+        สวัสดี อเล็กซ์! 👋 มีอะไรให้ช่วยไหม? วันนี้คุณทานอะไรดีเจ้านาย? 😊
+      </div>
+      <div class="msg-bubble user">
+        วันนี้กินอะไรดี งบ 60 บาท
+      </div>
+      <div class="msg-bubble bot">
+        วันนี้คุณได้รับน้ำตาลค่อนข้างมากแล้วนะ 🍯<br>
+        แนะนำ:<br>
+        🥗 สลัดอกไก่ย่าง Healthy Bites (฿95 — ใกล้ 320ม.)<br>
+        🍚 ข้าวกล้องไก่ต้ม (฿85)<br>
+        <strong>แทนของทอดน้า ✨</strong>
+      </div>
+    </div>
+
+    <div class="chat-quick-chips">
+      <div class="chat-quick-chip" onclick="sendChat(this,'💰 เมนูประหยัด')">💰 เมนูประหยัด</div>
+      <div class="chat-quick-chip" onclick="sendChat(this,'💪 โปรตีนสูง')">💪 โปรตีนสูง</div>
+      <div class="chat-quick-chip" onclick="sendChat(this,'🌙 เมนูดึก')">🌙 เมนูดึก</div>
+      <div class="chat-quick-chip" onclick="sendChat(this,'🍚 อิ่มนาน')">🍚 อิ่มนาน</div>
+      <div class="chat-quick-chip" onclick="sendChat(this,'🏪 ร้านใกล้ฉัน')">🏪 ร้านใกล้ฉัน</div>
+    </div>
+    <div class="chat-input-bar">
+      <input class="chat-input" id="chat-input" placeholder="พิมพ์ข้อความ..." onkeydown="if(event.key==='Enter')sendChatMsg()">
+      <button class="chat-send-btn" onclick="sendChatMsg()">➤</button>
+    </div>
+
+  </div><!-- /screen-chat -->
+
+  <!-- ============================================================
+       PAGE: STATS / SUMMARY
+  ============================================================ -->
+  <div class="screen hidden" id="screen-stats">
+    <div class="stats-page">
+
+      <div class="stats-header">
+        <h2>📊 สรุปโภชนาการ</h2>
+        <div class="date-nav">
+          <button class="date-nav-btn">‹</button>
+          <span>อังคาร 14 มี.ค.</span>
+          <button class="date-nav-btn">›</button>
+        </div>
+      </div>
+
+      <!-- Big Score -->
+      <div class="big-score-card">
+        <div class="big-score-num">82</div>
+        <div class="big-score-label">คะแนนสมดุลโภชนาการวันนี้</div>
+        <div class="big-score-sub">ทำได้ดีมาก! ขาดแค่ผักอีกนิดเดียว 💪</div>
+      </div>
+
+      <!-- Week Chart -->
+      <div class="card" style="margin:0 16px 16px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:12px;">
+          <h3>สรุป 7 วัน</h3>
+          <span style="font-size:12px; color:var(--text-secondary);">เฉลี่ย 82</span>
+        </div>
+        <div class="week-chart">
+          <div class="week-bar-wrap"><div class="week-bar" style="height:45px;"></div><span class="week-day">จ</span></div>
+          <div class="week-bar-wrap"><div class="week-bar" style="height:38px;"></div><span class="week-day">อ</span></div>
+          <div class="week-bar-wrap"><div class="week-bar" style="height:50px;"></div><span class="week-day">พ</span></div>
+          <div class="week-bar-wrap"><div class="week-bar" style="height:42px;"></div><span class="week-day">พฤ</span></div>
+          <div class="week-bar-wrap"><div class="week-bar" style="height:48px;"></div><span class="week-day">ศ</span></div>
+          <div class="week-bar-wrap"><div class="week-bar" style="height:30px;"></div><span class="week-day">ส</span></div>
+          <div class="week-bar-wrap"><div class="week-bar today" style="height:55px;"></div><span class="week-day" style="color:var(--primary); font-weight:700;">วันนี้</span></div>
+        </div>
+      </div>
+
+      <!-- Weight -->
+      <div class="weight-tracker" style="margin-bottom:16px;">
+        <div class="weight-header">
+          <div>
+            <div style="font-size:12px; color:var(--text-secondary);">น้ำหนักปัจจุบัน</div>
+            <div class="weight-main">65.2 <span style="font-size:16px; font-weight:400; color:var(--text-secondary);">กก.</span></div>
+            <div class="weight-goal">เป้าหมาย: 62 กก. · คงเหลือ 3.2 กก.</div>
+          </div>
+          <div class="weight-change down">↓ 0.5กก. จากสัปดาห์ที่แล้ว</div>
+        </div>
+        <div class="weight-mini-chart">
+          <div class="mini-bar" style="height:30px;"></div>
+          <div class="mini-bar" style="height:28px;"></div>
+          <div class="mini-bar" style="height:32px;"></div>
+          <div class="mini-bar" style="height:27px;"></div>
+          <div class="mini-bar" style="height:35px; background:var(--primary);"></div>
+        </div>
+        <button class="log-weight-btn">📝 บันทึกน้ำหนักประจำสัปดาห์</button>
+      </div>
+
+      <!-- Nutrients -->
+      <div class="nutrient-section">
+        <h3 style="margin-bottom:12px;">วันนี้คุณกินอะไรไปบ้าง</h3>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="prog-name">🥩 โปรตีน</span>
+            <span class="prog-val">68/100 ก.</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:68%; background:var(--primary);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="prog-name">🥬 ผัก</span>
+            <span class="prog-val">2/5 ส่วน</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:40%; background:var(--warning);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="prog-name">🍚 คาร์บ</span>
+            <span class="prog-val">180/280 ก.</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:64%; background:var(--accent);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="prog-name">🍬 น้ำตาล</span>
+            <span class="prog-val">9/12 ก.</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:75%; background:var(--secondary);"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="prog-name">💧 น้ำ</span>
+            <span class="prog-val">1.5 ลิตร</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:50%; background:#4FC3F7;"></div></div>
+        </div>
+        <div class="progress-item">
+          <div class="progress-header">
+            <span class="prog-name">🧈 ไขมัน</span>
+            <span class="prog-val">18/40 ก.</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" style="width:45%; background:#CE93D8;"></div></div>
+        </div>
+      </div>
+
+      <!-- Insights -->
+      <div style="padding:16px;">
+        <h3 style="margin-bottom:12px;">✨ ข้อมูลเชิงลึกประจำสัปดาห์</h3>
+      </div>
+      <div class="insight-list">
+        <div class="insight-item">
+          <span class="insight-icon">🥬</span>
+          <div class="insight-text">
+            <div class="insight-title">กินผักเพิ่มขึ้น 15%</div>
+            <div class="insight-desc">เยี่ยมเลย! สัปดาห์นี้คุณกินผักเฉลี่ย 3 ส่วน/วัน ดีกว่าสัปดาห์ที่แล้ว</div>
+          </div>
+        </div>
+        <div class="insight-item">
+          <span class="insight-icon">🏪</span>
+          <div class="insight-text">
+            <div class="insight-title">ลองร้านใหม่ 4 ร้าน</div>
+            <div class="insight-desc">คะแนนความหลากหลายของคุณเพิ่มขึ้น เก่งมาก!</div>
+          </div>
+        </div>
+        <div class="insight-item">
+          <span class="insight-icon">💪</span>
+          <div class="insight-text">
+            <div class="insight-title">โปรตีนเพียงพอ 5 ใน 7 วัน</div>
+            <div class="insight-desc">เกือบทุกวันคุณได้โปรตีนครบ ขาดแค่วันพุธและเสาร์</div>
+          </div>
+        </div>
+        <div class="insight-item" style="border-left:3px solid var(--warning);">
+          <span class="insight-icon">🍬</span>
+          <div class="insight-text">
+            <div class="insight-title">น้ำตาลยังสูงกว่าที่แนะนำ</div>
+            <div class="insight-desc">ลองลดเครื่องดื่มหวาน หรือเลือกสูตร 0% น้ำตาลแทน</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /stats-page -->
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
+      <button class="nav-item" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
+      <button class="nav-item active" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
+      <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
+      
+    </div>
+<button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
+  </div><!-- /screen-stats -->
+
+  <!-- ============================================================
+       PAGE: PROFILE
+  ============================================================ -->
+  <div class="screen hidden" id="screen-profile">
+    <div class="profile-page">
+
+      <div class="profile-header">
+        <div class="profile-avatar">🐶</div>
+        <div class="profile-name">อเล็กซ์</div>
+        <div class="profile-subtitle">ปี 3 · วิศวกรรมศาสตร์ · จุฬาฯ · มีพลัง ✨</div>
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <div class="ps-val" id="profile-stat-weight">65</div>
+            <div class="ps-label">กก.</div>
+          </div>
+          <div class="profile-stat">
+            <div class="ps-val">172</div>
+            <div class="ps-label">ซม.</div>
+          </div>
+          <div class="profile-stat">
+            <div class="ps-val">22.0</div>
+            <div class="ps-label">BMI</div>
+          </div>
+          <div class="profile-stat">
+            <div class="ps-val" id="profile-order-count">0</div>
+            <div class="ps-label">คำสั่งซื้อ</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-body">
+
+        <!-- Goal -->
+        <div class="profile-section">
+          <div class="profile-section-title">เป้าหมายของคุณ</div>
+          <div class="card" style="display:flex; align-items:center; gap:12px;">
+            <span style="font-size:28px;">⚖️</span>
+            <div>
+              <div style="font-size:15px; font-weight:700;">ควบคุมน้ำหนัก</div>
+              <div style="font-size:12px; color:var(--text-secondary);">รักษารูปร่างปัจจุบัน</div>
+            </div>
+            <button class="btn btn-outline" style="margin-left:auto; padding:6px 14px; font-size:12px;">แก้ไข</button>
+          </div>
+        </div>
+
+        <!-- Scores -->
+        <div class="profile-section">
+          <div class="profile-section-title">คะแนนของคุณ</div>
+          <div class="profile-score-cards">
+            <div class="profile-score-card">
+              <div class="psc-val">82</div>
+              <div class="psc-max">/100</div>
+              <div class="psc-label">สมดุลอาหาร</div>
+            </div>
+            <div class="profile-score-card">
+              <div class="psc-val">75</div>
+              <div class="psc-max">/100</div>
+              <div class="psc-label">ความหลากหลาย</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Food DNA -->
+        <div class="profile-section">
+          <div class="profile-section-title">🧬 Food DNA</div>
+          <div class="dna-preview">
+            <div class="dna-preview-title">82 · คะแนนความหลากหลาย</div>
+            <div class="dna-preview-item"><span>🍽️ กินบ่อย:</span>ผัดกะเพรา, ก๋วยเตี๋ยว</div>
+            <div class="dna-preview-item"><span>➕ ควรเพิ่ม:</span>ปลา, ผักใบเขียว</div>
+            <div class="dna-preview-item"><span>➖ ควรลด:</span>เครื่องดื่มหวาน, ของทอด</div>
+          </div>
+        </div>
+
+        <!-- Order History  ← UPDATED -->
+        <div class="profile-section">
+          <div class="profile-section-title">📜 ประวัติการสั่งอาหาร</div>
+          <div class="card" style="margin-bottom:10px;">
+            <div style="display:flex; gap:20px; margin-bottom:12px;">
+              <div>
+                <div style="font-size:22px; font-weight:800; color:var(--text-primary);" id="profile-total-orders">0</div>
+                <div style="font-size:12px; color:var(--text-secondary);">ครั้งที่สั่ง</div>
+              </div>
+              <div>
+                <div style="font-size:22px; font-weight:800; color:var(--primary-dark);" id="profile-total-spend">฿0</div>
+                <div style="font-size:12px; color:var(--text-secondary);">รวมทั้งหมด</div>
+              </div>
+            </div>
+            <!-- Tab Filter -->
+            <div style="display:flex; gap:8px; margin-bottom:12px;">
+              <div class="chip active" onclick="filterOrders('all',this)" id="filter-all">ทั้งหมด</div>
+              <div class="chip" onclick="filterOrders('week',this)" id="filter-week">สัปดาห์นี้</div>
+              <div class="chip" onclick="filterOrders('month',this)" id="filter-month">เดือนนี้</div>
+            </div>
+            <!-- Order List -->
+            <div id="order-history-list">
+              <div class="empty-state" style="padding:20px 0;">
+                <div class="empty-icon">🛒</div>
+                <div class="empty-title">ยังไม่มีประวัติการสั่งซื้อ</div>
+                <div class="empty-desc">ลองสั่งอาหารครั้งแรกของคุณเลย!</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Favourites -->
+        <div class="profile-section">
+          <div class="profile-section-title">❤️ ร้านโปรดของคุณ</div>
+          <div class="card" style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="showPage('restaurant-detail')">
+            <span style="font-size:32px;">🥗</span>
+            <div>
+              <div style="font-size:14px; font-weight:700;">Healthy Bites</div>
+              <div style="font-size:12px; color:var(--text-secondary);">⭐ 4.8 · 📍 320ม.</div>
+            </div>
+            <span style="margin-left:auto; color:var(--primary);">→</span>
+          </div>
+        </div>
+
+        <!-- Menu -->
+        <div class="profile-section">
+          <div class="card" style="padding:0;">
+            <div class="menu-list-item" style="padding:14px 16px;" onclick="showPage('stats')">
+              <div class="mli-left"><div class="mli-icon">📅</div><div class="mli-text">สรุปประจำสัปดาห์</div></div>
+              <span class="mli-chevron">›</span>
+            </div>
+            <div class="menu-list-item" style="padding:14px 16px;">
+              <div class="mli-left"><div class="mli-icon">🎯</div><div class="mli-text">เป้าหมาย & โปรไฟล์สุขภาพ</div></div>
+              <span class="mli-chevron">›</span>
+            </div>
+            <div class="menu-list-item" style="padding:14px 16px;">
+              <div class="mli-left"><div class="mli-icon">📈</div><div class="mli-text">ประวัติน้ำหนัก</div></div>
+              <span class="mli-chevron">›</span>
+            </div>
+            <div class="menu-list-item" style="padding:14px 16px;">
+              <div class="mli-left"><div class="mli-icon">🏪</div><div class="mli-text">ร้านที่บันทึกไว้</div></div>
+              <span class="mli-chevron">›</span>
+            </div>
+            <div class="menu-list-item" style="padding:14px 16px;" onclick="showPage('notif')">
+              <div class="mli-left"><div class="mli-icon">🔔</div><div class="mli-text">การแจ้งเตือน</div></div>
+              <span class="mli-chevron">›</span>
+            </div>
+            <div class="menu-list-item" style="padding:14px 16px; color:var(--danger);" onclick="showPhone(1)">
+              <div class="mli-left"><div class="mli-icon">🚪</div><div class="mli-text" style="color:var(--danger);">ออกจากระบบ</div></div>
+              <span class="mli-chevron" style="color:var(--danger);">›</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div><!-- /profile-page -->
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
+      <button class="nav-item" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
+      <button class="nav-item" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
+      <button class="nav-item active" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
+      
+    </div>
+<button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
+  </div><!-- /screen-profile -->
+
+  <!-- ============================================================
+       PAGE: NOTIFICATIONS
+  ============================================================ -->
+  <div class="screen hidden" id="screen-notif">
+    <div class="notif-page">
+      <div class="notif-header">
+        <div style="display:flex; align-items:center; gap:12px;">
+          <button class="back-btn" onclick="showPage('home')">←</button>
+          <h2>🔔 การแจ้งเตือน</h2>
+        </div>
+        <span style="font-size:12px; color:var(--primary); font-weight:700; cursor:pointer;">อ่านทั้งหมด</span>
+      </div>
+
+      <div class="notif-item unread">
+        <div class="notif-icon green">🥗</div>
+        <div class="notif-text">
+          <div class="notif-title">EATDY · คาบแลปอีก 60 นาที!</div>
+          <div class="notif-desc">ร้าน Healthy Bites ห่างไป 320 ม. — เดิน 4 นาทีถึง</div>
+          <div class="notif-time">ตอนนี้</div>
+        </div>
+        <div class="notif-unread-dot"></div>
+      </div>
+      <div class="notif-item unread">
+        <div class="notif-icon green">🌿</div>
+        <div class="notif-text">
+          <div class="notif-title">EATDY · วันนี้คุณยังขาดผัก</div>
+          <div class="notif-desc">ลองสลัดอกไก่ย่าง ฿95 — ใกล้คุณที่สุด</div>
+          <div class="notif-time">5 นาทีที่แล้ว</div>
+        </div>
+        <div class="notif-unread-dot"></div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-icon red">⚠️</div>
+        <div class="notif-text">
+          <div class="notif-title">การแจ้งเตือนสุขภาพ</div>
+          <div class="notif-desc">น้ำตาลวันนี้สูง (42ก.) งดชานมไข่มุก ลองน้ำมะนาวแทน!</div>
+          <div class="notif-time">2 ชม.ที่แล้ว</div>
+        </div>
+      </div>
+      <div class="notif-item">
+        <div class="notif-icon blue">🤖</div>
+        <div class="notif-text">
+          <div class="notif-title">บัดดี้ · มีอะไรจะบอก!</div>
+          <div class="notif-desc">สัปดาห์นี้กินผัดกะเพรา 3 ครั้งแล้ว ลองร้าน Bowl & Soul แทนดีไหม?</div>
+          <div class="notif-time">3 ชม.ที่แล้ว</div>
+        </div>
+      </div>
+
+      <!-- Order success notifications (dynamic) -->
+      <div id="order-notif-list"></div>
+
+    </div><!-- /notif-page -->
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
+      <button class="nav-item" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
+      <button class="nav-item" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
+      <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
+      
+    </div>
+<button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
+  </div><!-- /screen-notif -->
+
+  <!-- ============================================================
+       SUCCESS MODAL  ← NEW
+  ============================================================ -->
+  <div class="modal-overlay" id="order-success-modal">
+    <div class="modal-box">
+      <div class="modal-success-icon">✅</div>
+      <div class="modal-title">สั่งซื้อสำเร็จ! 🎉</div>
+      <div class="modal-subtitle" id="modal-subtitle-text">
+        ร้านได้รับคำสั่งซื้อของคุณแล้ว<br>เตรียมตัวรับอาหารได้เลย!
+      </div>
+      <div class="modal-detail-card" id="modal-detail-card">
+        <!-- filled by JS -->
+      </div>
+      <div class="modal-btn-group">
+        <button class="btn btn-secondary" onclick="closeSuccessModal()">ปิด</button>
+        <button class="btn btn-primary" onclick="closeSuccessModal(); showPage('profile')">ดูประวัติ →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MANUAL MEAL LOG MODAL  ← NEW
+  ============================================================ -->
+  <div class="modal-overlay" id="manualMealModal">
+    <div class="modal-box">
+      <div class="modal-success-icon">✍️</div>
+      <div class="modal-title">บันทึกอาหารทานเอง</div>
+      <div class="modal-subtitle">กรอกข้อมูลมื้ออาหารที่ทำกินเองหรือทานข้างนอก เพื่อสะสมคะแนนให้น้องสัตว์เลี้ยง</div>
+
+      <div class="form-group">
+        <label class="form-label">ชื่อเมนูอาหาร</label>
+        <input class="form-input" type="text" id="manualMeal-name" placeholder="เช่น ข้าวผัดกะเพราไก่ไข่ดาว">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">แคลอรีโดยประมาณ (kcal)</label>
+        <input class="form-input" type="number" id="manualMeal-calories" placeholder="เช่น 550" min="0" inputmode="numeric">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">สารอาหาร (ถ้ามี)</label>
+        <div class="macro-grid">
+          <div class="form-group">
+            <input class="form-input" type="number" id="manualMeal-protein" placeholder="โปรตีน (ก.)" min="0">
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="number" id="manualMeal-carb" placeholder="คาร์บ (ก.)" min="0">
+          </div>
+          <div class="form-group">
+            <input class="form-input" type="number" id="manualMeal-fat" placeholder="ไขมัน (ก.)" min="0">
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label">แหล่งที่มา</label>
+        <div class="source-toggle">
+          <div class="source-option selected" id="manualMeal-source-home" onclick="selectMealSource('home')">ทำอาหารเอง 🍳</div>
+          <div class="source-option" id="manualMeal-source-outside" onclick="selectMealSource('outside')">กินข้างนอก 🍽️</div>
+        </div>
+      </div>
+
+      <div class="modal-btn-group">
+        <button class="btn btn-secondary" onclick="closeManualMealModal()">ยกเลิก</button>
+        <button class="btn btn-primary" onclick="saveManualMeal()">บันทึกมื้ออาหาร</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       TOAST  ← NEW
+  ============================================================ -->
+  <div class="toast" id="toast"></div>
+
+
+
+</div><!-- /phone-home -->
+<div class="phone-label">Main App</div>
+</div>
+
+<!-- ============================================================
+     JAVASCRIPT
+============================================================ -->
+<script>
+    /* ฟังก์ชันควบคุมการเปิด/ปิดหน้าต่างแชทลอยตัว */
+function toggleFloatingChat() {
+  const chatWindow = document.getElementById('screen-chat');
+  const fabButton = document.querySelector('.chat-fab');
+  
+  if (chatWindow.classList.contains('hidden')) {
+    chatWindow.classList.remove('hidden');
+    fabButton.innerHTML = '❌'; // เปลี่ยนปุ่มเป็นกากบาทเมื่อเปิดแชท
+    // เลื่อนตำแหน่งแชทลงด้านล่างสุดอัตโนมัติเมื่อเปิดขึ้นมา
+    const container = document.getElementById('chat-msg-container');
+    if (container) container.scrollTop = container.scrollHeight;
+  } else {
+    chatWindow.classList.add('hidden');
+    fabButton.innerHTML = '💬'; // เปลี่ยนปุ่มกลับมาเป็นรูปแชท
+  }
+}
+/* ==============================================
+   STATE
+============================================== */
+const state = {
+  currentPage: 'home',
+  selectedChannel: 'pickup',      // 'delivery' | 'pickup'
+  selectedPlatform: null,          // 'GrabFood' | 'LINE MAN' | 'Foodpanda'
+  platformFees: { 'GrabFood': 10, 'LINE MAN': 15, 'Foodpanda': 12 },
+  qty: 1,
+  basePrice: 95,
+  discountRate: 0.15,
+  orderHistory: [],
+  totalSpend: 0,
+};
+
+/* ==============================================
+   PHONE SWITCHER
+============================================== */
+/* ==============================================
+   PHONE / SCREEN FLOW CONTROLLER
+============================================== */
+function showPhone(n) {
+  [1, 2, 3].forEach(i => {
+    const wrapper = document.getElementById(`phone-wrapper-${i}`);
+    if (wrapper) wrapper.style.display = i === n ? 'block' : 'none';
+  });
+  // When switching to Home (phone 3), reset to home screen
+  if (n === 3) {
+    showPage('home');
+  }
+  // When switching to Onboarding (phone 2), reset to step 1
+  if (n === 2) {
+    for (let s = 1; s <= 5; s++) {
+      const step = document.getElementById(`ob-step${s}`);
+      if (step) step.classList.toggle('active', s === 1);
+    }
+    for (let d = 1; d <= 5; d++) {
+      const dot = document.getElementById(`od${d}`);
+      if (dot) dot.classList.toggle('done', d === 1);
+    }
+  }
+}
+// Initially show only Login (phone 1)
+showPhone(1);
+
+/* ==============================================
+   PAGE ROUTER (within Phone 3)
+============================================== */
+const pages = ['home','restaurant-detail','menu-detail','map','chat','stats','profile','notif','settings'];
+
+function showPage(page) {
+  pages.forEach(p => {
+    const el = document.getElementById(`screen-${p}`);
+    if (el) el.classList.add('hidden');
+  });
+  const target = document.getElementById(`screen-${page}`);
+  if (target) {
+    target.classList.remove('hidden');
+    target.scrollTop = 0;
+  }
+  state.currentPage = page;
+  updateNavActive(page);
+}
+
+/* ==============================================
+   MAP -> RESTAURANT DETAIL
+============================================== */
+function goToRestaurantDetail(name) {
+  const nameEl = document.getElementById('rest-detail-name');
+  if (nameEl) nameEl.textContent = name;
+  showPage('restaurant-detail');
+}
+
+function updateNavActive(page) {
+  const navMap = { home:'home', map:'map', chat:'chat', stats:'stats', profile:'profile',
+                   'restaurant-detail':'home', 'menu-detail':'home', notif:'home', settings:'profile' };
+  const activeIcon = navMap[page] || page;
+  document.querySelectorAll('.bottom-nav .nav-item').forEach(btn => {
+    btn.classList.remove('active');
+    const label = btn.querySelector('.nav-label');
+    if (label) {
+      const map = { 'หน้าหลัก':'home', 'แผนที่':'map', 'AI Chat':'chat', 'สรุป':'stats', 'โปรไฟล์':'profile' };
+      if (map[label.textContent] === activeIcon) btn.classList.add('active');
+    }
+  });
+}
+
+/* ==============================================
+   RESTAURANT TABS
+============================================== */
+function switchTab(tab) {
+  ['menu','nutrition','review'].forEach(t => {
+    const el = document.getElementById(`tab-${t}`);
+    if (el) el.classList.toggle('hidden', t !== tab);
+  });
+  document.querySelectorAll('#rest-tabs .tab-item').forEach((el,i) => {
+    el.classList.toggle('active', ['menu','nutrition','review'][i] === tab);
+  });
+}
+
+/* ==============================================
+   MAP POPUP
+============================================== */
+function showMapPopup() {
+  document.getElementById('map-popup').classList.add('show');
+}
+function hideMapPopup() {
+  document.getElementById('map-popup').classList.remove('show');
+}
+
+/* ==============================================
+   ONBOARDING HELPERS
+============================================== */
+function selectBuddy(el) {
+  el.closest('.buddy-grid').querySelectorAll('.buddy-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectGoal(el) {
+  el.closest('.goal-list').querySelectorAll('.goal-item').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectGender(el) {
+  el.parentElement.querySelectorAll('.channel-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function updateRange(input, displayId) {
+  const el = document.getElementById(displayId);
+  if (el) el.textContent = input.value;
+}
+function nextObStep(from, to) {
+  document.getElementById(`ob-step${from}`).classList.remove('active');
+  document.getElementById(`ob-step${to}`).classList.add('active');
+  for (let i = 1; i <= 5; i++) {
+    document.getElementById(`od${i}`).classList.toggle('done', i <= to);
+  }
+}
+
+/* ==============================================
+   CHANNEL SELECTOR  ← NEW
+============================================== */
+function selectChannel(channel) {
+  state.selectedChannel = channel;
+  state.selectedPlatform = null;
+
+  // Update UI cards
+  document.getElementById('ch-delivery').classList.toggle('selected', channel === 'delivery');
+  document.getElementById('ch-pickup').classList.toggle('selected', channel === 'pickup');
+
+  // Show/hide sections
+  const deliverySection = document.getElementById('delivery-platform-section');
+  const pickupSection   = document.getElementById('pickup-info-section');
+  const delivFeeRow     = document.getElementById('delivery-fee-row');
+  const orderSummary    = document.getElementById('order-summary-section');
+  const orderBtnWrap    = document.getElementById('order-btn-wrap');
+
+  const isPickup = channel === 'pickup';
+
+  deliverySection.classList.toggle('hidden', channel !== 'delivery');
+  pickupSection.style.display = isPickup ? 'block' : 'none';
+  delivFeeRow.style.display   = 'none';
+
+  // Pickup mode: hide order summary & order button (no in-app ordering)
+  // Delivery mode: show order summary & order button as usual
+  orderSummary.classList.toggle('hidden', isPickup);
+  orderBtnWrap.classList.toggle('hidden', isPickup);
+
+  // Reset platform selection
+  document.querySelectorAll('.platform-item').forEach(p => p.classList.remove('selected'));
+  document.getElementById('summary-delivery-fee').textContent = '0';
+  document.getElementById('summary-platform').textContent = '-';
+
+  recalcTotal();
+}
+
+/* ==============================================
+   PLATFORM SELECTOR  ← NEW
+============================================== */
+function selectPlatform(name, elemId) {
+  state.selectedPlatform = name;
+
+  document.querySelectorAll('.platform-item').forEach(p => p.classList.remove('selected'));
+  document.getElementById(elemId).classList.add('selected');
+
+  const fee = state.platformFees[name] || 0;
+  document.getElementById('delivery-fee-row').style.display = 'flex';
+  document.getElementById('summary-delivery-fee').textContent = fee;
+  document.getElementById('summary-platform').textContent = name;
+
+  recalcTotal();
+}
+
+/* ==============================================
+   QUANTITY SELECTOR
+============================================== */
+function changeQty(delta) {
+  state.qty = Math.max(1, Math.min(10, state.qty + delta));
+  document.getElementById('qty-display').textContent = state.qty;
+  document.getElementById('summary-qty').textContent = state.qty;
+  recalcTotal();
+}
+
+/* ==============================================
+   PRICE CALCULATOR
+============================================== */
+function recalcTotal() {
+  const subtotal  = state.basePrice * state.qty;
+  const delivFee  = (state.selectedChannel === 'delivery' && state.selectedPlatform)
+                    ? (state.platformFees[state.selectedPlatform] || 0) : 0;
+  const discount  = Math.round(subtotal * state.discountRate);
+  const total     = subtotal + delivFee - discount;
+
+  document.getElementById('summary-subtotal').textContent   = subtotal;
+  document.getElementById('summary-discount').textContent   = discount;
+  document.getElementById('summary-total').textContent      = total;
+
+  // Update pickup total price display ← NEW
+  const pickupTotalEl = document.getElementById('pickup-total-price');
+  if (pickupTotalEl) pickupTotalEl.textContent = total;
+}
+
+/* ==============================================
+   PLACE ORDER  ← NEW
+============================================== */
+function placeOrder() {
+  // Guard: ordering is disabled in pickup mode
+  if (state.selectedChannel === 'pickup') {
+    showTip('📍 โหมดรับที่ร้านไม่รองรับการสั่งซื้อผ่านแอป');
+    return;
+  }
+
+  // Validation
+  if (state.selectedChannel === 'delivery' && !state.selectedPlatform) {
+    showTip('⚠️ กรุณาเลือกแพลตฟอร์มส่งอาหารก่อน');
+    return;
+  }
+
+  const subtotal  = state.basePrice * state.qty;
+  const delivFee  = (state.selectedChannel === 'delivery' && state.selectedPlatform)
+                    ? (state.platformFees[state.selectedPlatform] || 0) : 0;
+  const discount  = Math.round(subtotal * state.discountRate);
+  const total     = subtotal + delivFee - discount;
+
+  // Build order record
+  const now       = new Date();
+  const dateStr   = now.toLocaleDateString('th-TH', { day:'numeric', month:'short' });
+  const timeStr   = now.toLocaleTimeString('th-TH', { hour:'2-digit', minute:'2-digit' });
+
+  const order = {
+    id:         Date.now(),
+    menu:       'สลัดอกไก่ย่าง',
+    emoji:      '🥗',
+    restaurant: 'Healthy Bites',
+    qty:        state.qty,
+    subtotal,
+    delivFee,
+    discount,
+    total,
+    channel:    state.selectedChannel,
+    platform:   state.selectedPlatform,
+    date:       dateStr,
+    time:       timeStr,
+    timestamp:  now,
+  };
+
+  state.orderHistory.unshift(order);
+  state.totalSpend += total;
+
+  // Update stats
+  updateOrderStats();
+
+  // Show success modal
+  showSuccessModal(order);
+
+  // Add to notification list
+  addOrderNotif(order);
+}
+
+/* ==============================================
+   UPDATE ORDER STATS  ← NEW
+============================================== */
+function updateOrderStats() {
+  const count = state.orderHistory.length;
+  const spend = state.totalSpend;
+
+  // Profile page stats
+  const elCount = document.getElementById('profile-order-count');
+  const elTotal = document.getElementById('profile-total-orders');
+  const elSpend = document.getElementById('profile-total-spend');
+  if (elCount) elCount.textContent = count;
+  if (elTotal) elTotal.textContent = count;
+  if (elSpend) elSpend.textContent = `฿${spend.toLocaleString()}`;
+
+  // Re-render order list
+  renderOrderHistory('all');
+}
+
+/* ==============================================
+   RENDER ORDER HISTORY  ← NEW
+============================================== */
+function renderOrderHistory(filter) {
+  const list = document.getElementById('order-history-list');
+  if (!list) return;
+
+  let orders = [...state.orderHistory];
+  const now  = new Date();
+
+  if (filter === 'week') {
+    const weekAgo = new Date(now - 7 * 24 * 60 * 60 * 1000);
+    orders = orders.filter(o => o.timestamp >= weekAgo);
+  } else if (filter === 'month') {
+    const monthAgo = new Date(now - 30 * 24 * 60 * 60 * 1000);
+    orders = orders.filter(o => o.timestamp >= monthAgo);
+  }
+
+  if (orders.length === 0) {
+    list.innerHTML = `
+      <div class="empty-state" style="padding:20px 0;">
+        <div class="empty-icon">🛒</div>
+        <div class="empty-title">ยังไม่มีประวัติการสั่งซื้อ</div>
+        <div class="empty-desc">ลองสั่งอาหารครั้งแรกของคุณเลย!</div>
+      </div>`;
+    return;
+  }
+
+  list.innerHTML = orders.map(o => {
+    const channelTag = o.channel === 'delivery'
+      ? `<span class="order-tag delivery">🛵 ${o.platform || 'Delivery'}</span>`
+      : o.channel === 'manual'
+        ? `<span class="order-tag pickup">${o.source === 'home' ? '🍳 ทำอาหารเอง' : '🍽️ กินข้างนอก'}</span>`
+        : `<span class="order-tag pickup">🏃 รับที่ร้าน</span>`;
+    const priceLabel = o.channel === 'manual' ? '🆓 บันทึกเอง' : `฿${o.total}`;
+    return `
+      <div class="order-history-item">
+        <div class="order-emoji">${o.emoji}</div>
+        <div class="order-info">
+          <div class="order-menu-name">${o.menu}${o.qty > 1 ? ` ×${o.qty}` : ''}</div>
+          <div class="order-restaurant">${o.restaurant}</div>
+          <div class="order-meta">
+            ${channelTag}
+            <span class="order-tag date">📅 ${o.date} ${o.time}</span>
+          </div>
+        </div>
+        <div class="order-price">${priceLabel}</div>
+      </div>`;
+  }).join('');
+}
+
+function filterOrders(filter, el) {
+  document.querySelectorAll('#filter-all, #filter-week, #filter-month').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderOrderHistory(filter);
+}
+
+/* ==============================================
+   SUCCESS MODAL  ← NEW
+============================================== */
+function showSuccessModal(order) {
+  const channelLabel = order.channel === 'delivery'
+    ? `🛵 Delivery · ${order.platform}`
+    : '🏃 รับที่ร้านด้วยตัวเอง';
+
+  const etaLabel = order.channel === 'delivery'
+    ? (order.platform === 'GrabFood' ? '~25 นาที' : order.platform === 'LINE MAN' ? '~30 นาที' : '~20 นาที')
+    : '🚶 เดิน 4 นาทีถึงร้าน';
+
+  document.getElementById('modal-detail-card').innerHTML = `
+    <div class="modal-detail-row">
+      <span class="label">เมนู</span>
+      <span class="value">${order.menu} ×${order.qty}</span>
+    </div>
+    <div class="modal-detail-row">
+      <span class="label">ร้าน</span>
+      <span class="value">${order.restaurant}</span>
+    </div>
+    <div class="modal-detail-row">
+      <span class="label">ช่องทาง</span>
+      <span class="value">${channelLabel}</span>
+    </div>
+    <hr class="modal-detail-divider">
+    <div class="modal-detail-row">
+      <span class="label">ราคาอาหาร</span>
+      <span class="value">฿${order.subtotal}</span>
+    </div>
+    ${order.delivFee ? `<div class="modal-detail-row"><span class="label">ค่าส่ง</span><span class="value">฿${order.delivFee}</span></div>` : ''}
+    <div class="modal-detail-row">
+      <span class="label">ส่วนลด 15%</span>
+      <span class="value" style="color:var(--primary);">-฿${order.discount}</span>
+    </div>
+    <hr class="modal-detail-divider">
+    <div class="modal-detail-row">
+      <span class="label" style="font-weight:700;">ยอดรวม</span>
+      <span class="value price">฿${order.total}</span>
+    </div>
+    <div class="modal-detail-row" style="margin-top:6px;">
+      <span class="label">⏱️ เวลาโดยประมาณ</span>
+      <span class="value">${etaLabel}</span>
+    </div>`;
+
+  document.getElementById('modal-subtitle-text').textContent =
+    order.channel === 'delivery'
+      ? `${order.platform} ได้รับคำสั่งซื้อแล้ว\nเตรียมตัวรับอาหารได้เลย!`
+      : 'ร้านได้รับคำสั่งซื้อแล้ว\nไปรับที่ร้านได้เลย!';
+
+  document.getElementById('order-success-modal').classList.add('show');
+}
+
+function closeSuccessModal() {
+  document.getElementById('order-success-modal').classList.remove('show');
+}
+
+/* ==============================================
+   TOAST  ← NEW
+============================================== */
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'toast' + (type === 'warn' ? ' warn' : type === 'danger' ? ' danger' : '');
+  t.classList.add('show');
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* ==============================================
+   MANUAL MEAL LOG  ← NEW
+============================================== */
+state.manualMealSource = 'home';
+
+function openManualMealModal() {
+  // Reset form
+  document.getElementById('manualMeal-name').value = '';
+  document.getElementById('manualMeal-calories').value = '';
+  document.getElementById('manualMeal-protein').value = '';
+  document.getElementById('manualMeal-carb').value = '';
+  document.getElementById('manualMeal-fat').value = '';
+  selectMealSource('home');
+  document.getElementById('manualMealModal').classList.add('show');
+}
+
+function closeManualMealModal() {
+  document.getElementById('manualMealModal').classList.remove('show');
+}
+
+function selectMealSource(source) {
+  state.manualMealSource = source;
+  document.getElementById('manualMeal-source-home').classList.toggle('selected', source === 'home');
+  document.getElementById('manualMeal-source-outside').classList.toggle('selected', source === 'outside');
+}
+
+function saveManualMeal() {
+  const name     = document.getElementById('manualMeal-name').value.trim();
+  const calories = parseInt(document.getElementById('manualMeal-calories').value, 10);
+
+  if (!name) {
+    showToast('⚠️ กรุณากรอกชื่อเมนูอาหาร', 'warn');
+    return;
+  }
+  if (isNaN(calories) || calories <= 0) {
+    showToast('⚠️ กรุณากรอกแคลอรีโดยประมาณ', 'warn');
+    return;
+  }
+
+  const protein = parseFloat(document.getElementById('manualMeal-protein').value) || 0;
+  const carb    = parseFloat(document.getElementById('manualMeal-carb').value) || 0;
+  const fat     = parseFloat(document.getElementById('manualMeal-fat').value) || 0;
+  const source  = state.manualMealSource; // 'home' or 'outside'
+
+  const now     = new Date();
+  const dateStr = now.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' });
+  const timeStr = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+
+  // Build a meal record compatible with order/meal history
+  const meal = {
+    id:         Date.now(),
+    menu:       name,
+    emoji:      source === 'home' ? '🍳' : '🍽️',
+    restaurant: source === 'home' ? 'ทำอาหารเอง' : 'ทานข้างนอก',
+    qty:        1,
+    subtotal:   0,
+    delivFee:   0,
+    discount:   0,
+    total:      0,
+    calories,
+    protein,
+    carb,
+    fat,
+    channel:    'manual',
+    platform:   null,
+    source,
+    date:       dateStr,
+    time:       timeStr,
+    timestamp:  now,
+  };
+
+  state.orderHistory.unshift(meal);
+
+  // Update stats & re-render history list
+  updateOrderStats();
+
+  closeManualMealModal();
+  showToast('✅ บันทึกอาหารทำเองเรียบร้อย!');
+}
+
+/* ==============================================
+   ORDER NOTIFICATION
+============================================== */
+function addOrderNotif(order) {
+  const container = document.getElementById('order-notif-list');
+  if (!container) return;
+  const div = document.createElement('div');
+  div.className = 'notif-item unread';
+  div.innerHTML = `
+    <div class="notif-icon green">✅</div>
+    <div class="notif-text">
+      <div class="notif-title">สั่งซื้อสำเร็จ!</div>
+      <div class="notif-desc">${order.menu} จาก ${order.restaurant} · ฿${order.total} · ${order.channel === 'delivery' ? order.platform : 'รับที่ร้าน'}</div>
+      <div class="notif-time">เมื่อสักครู่</div>
+    </div>
+    <div class="notif-unread-dot"></div>`;
+  container.prepend(div);
+}
+
+/* ==============================================
+   CHAT
+============================================== */
+const chatResponses = {
+  '💰 เมนูประหยัด': 'เมนูประหยัดวันนี้: 🍱 ข้าวกล้องไก่ต้ม ฿85 · 🥗 สลัดอกไก่ ฿95 ทั้งคู่อยู่ในงบ 100 บาท ✨',
+  '💪 โปรตีนสูง':  'เมนูโปรตีนสูงแนะนำ: 🥗 สลัดอกไก่ย่าง (32ก.) · 🍳 ไข่ออมเล็ตผัก (24ก.) ทานเสริมกล้ามเนื้อได้ดีมาก 💪',
+  '🌙 เมนูดึก':    'เมนูดึกที่ไม่หนักเกินไป: 🥗 สลัดเบาๆ หรือ 🍜 ก๋วยเตี๋ยวน้ำใส หลีกเลี่ยงของมัน/หวานก่อนนอนนะ 🌙',
+  '🍚 อิ่มนาน':    'อยากอิ่มนาน ลอง: 🍚 ข้าวกล้องไก่ต้ม — คาร์บเชิงซ้อน + โปรตีน ทำให้อิ่มได้นาน 4-5 ชั่วโมง ✨',
+  '🏪 ร้านใกล้ฉัน': 'ร้านใกล้คุณตอนนี้: 🥗 Healthy Bites (320ม.) · 🍱 Bowl & Soul (450ม.) · 🍜 ป้าแดง (200ม.) 📍',
+};
+
+function sendChat(el, text) {
+  addChatMsg(text, 'user');
+  const resp = chatResponses[text] || 'ขอบคุณที่ถามนะ! กำลังหาข้อมูลให้เลย 🔍';
+  setTimeout(() => addChatMsg(resp, 'bot'), 600);
+}
+
+function sendChatMsg() {
+  const input = document.getElementById('chat-input');
+  const text  = input.value.trim();
+  if (!text) return;
+  addChatMsg(text, 'user');
+  input.value = '';
+  const resp = chatResponses[text] || `ได้รับคำถามของคุณแล้ว! "${text}" — กำลังวิเคราะห์เมนูที่เหมาะสม 🤖`;
+  setTimeout(() => addChatMsg(resp, 'bot'), 700);
+}
+
+function addChatMsg(text, type) {
+  const container = document.getElementById('chat-msg-container');
+  const div = document.createElement('div');
+  div.className = `msg-bubble ${type}`;
+  div.innerHTML = text;
+  container.appendChild(div);
+  container.scrollTop = container.scrollHeight;
+}
+
+/* ==============================================
+   FLOATING TIP
+============================================== */
+function showTip(msg, duration = 2500) {
+  const tip = document.getElementById('floating-tip');
+  tip.textContent = msg;
+  tip.classList.add('show');
+  setTimeout(() => tip.classList.remove('show'), duration);
+}
+
+/* ==============================================
+   INIT
+============================================== */
+// Default channel: pickup selected, delivery hidden
+selectChannel('pickup');
+recalcTotal();
+</script>
+</body>
+</html>
