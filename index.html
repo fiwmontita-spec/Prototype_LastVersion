@@ -3174,15 +3174,19 @@ body {
   ============================================================ -->
   <div class="screen hidden" id="screen-chat" style="display:flex; flex-direction:column; height:812px;">
     <div class="status-bar">
-      <button class="back-btn" onclick="showPage('home')">←</button>
-    </div>
-    <div class="chat-avatar">
-      <div class="chat-info">
-        <div class="chat-name">ป็อปปี้ (EATDY AI)</div>
-        <div class="chat-status">ออนไลน์ · พร้อมช่วย</div>
-      </div>
-      <button class="notif-btn" style="background:var(--surface-3); color:var(--text-primary);" onclick="showPage('notif')">🔔</button>
-    </div>
+  <button class="back-btn" onclick="showPage('home')">←</button>
+</div>
+<div class="chat-header">
+  <div class="chat-avatar" style="background:transparent; overflow:visible;">
+    <img id="chat-buddy-avatar" src="https://i.ibb.co/dx638Nn/Buddy-Mummum.png"
+         style="width:100%; height:100%; object-fit:contain;">
+  </div>
+  <div class="chat-info">
+    <div class="chat-name">EATDY AI</div>
+    <div class="chat-status">ออนไลน์ · พร้อมช่วย</div>
+  </div>
+  <button class="notif-btn" style="background:var(--surface-3); color:var(--text-primary);" onclick="showPage('notif')">🔔</button>
+</div>
 
     <div class="chat-messages" id="chat-msg-container">
       <div class="msg-bubble bot">
