@@ -548,7 +548,87 @@ body {
   }
   .manual-meal-btn:hover { background: var(--primary-light); }
   .manual-meal-btn:active { transform: scale(0.98); }
+  /* ============================================================
+     RECOMMENDED RESTAURANT TOGGLE CARD  ← NEW
+  ============================================================ */
+  .reco-rest-wrap {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
 
+.reco-rest-sticker {
+  position: absolute;
+  top: -5px;
+  right: -10px;
+  width: 130px;
+  height: 130px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.reco-rest-sticker img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  margin-right: 310px;
+}
+.reco-rest-sticker1 {
+  position: absolute;
+  top: -10px;
+  right: -13px;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 10px;
+  display: flex;
+  align-items: top;
+  justify-content: top;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.reco-rest-sticker1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  margin-right: px;
+}
+
+.reco-rest-card {
+  width: 178.4px;
+  height: 120px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--border);
+  background: var(--surface);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: revert;
+  justify-content: center;
+  transition: all var(--transition);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+.reco-rest-card:hover { box-shadow: var(--shadow-md); }
+.reco-rest-card:active { transform: scale(0.98); }
+
+.reco-rest-default {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 6px;
+  padding: 49px 0;
+  color: var(--primary-dark);
+}
+.reco-rest-default .reco-rest-icon { font-size: 16px; }
+.reco-rest-default .reco-rest-label { font-size: 16px; font-weight: 700; }
   #manualMealModal .modal-box {
     max-width: 360px;
     text-align: left;
@@ -1102,7 +1182,33 @@ body {
 
   /* Home Content */
   .home-content { padding: 16px; display: flex; flex-direction: column; gap: 10px; }
-
+ 
+  /* Event Bar */
+.event-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-full);
+  padding: 0;
+  cursor: pointer;
+  transition: border-color var(--transition);
+  position: relative;
+  overflow: hidden;
+  height: 60px;
+}
+  .event-bar:hover { border-color: var(--primary-light); }
+  .event-bar input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    color: var(--text-primary);
+    background: transparent;
+  }
+  .event-bar input::placeholder { color: var(--text-hint); }
+ 
   /* Search Bar */
   .search-bar {
     display: flex;
@@ -2117,12 +2223,12 @@ body {
 <div class="phone">
   <div class="screen">
     <div class="login-page">
-      <div class="login-logo">🐾</div>
+      <div class="login-logo"><img src="Buddy_Omnom.png" style="width:120px; height:120px; object-fit:contain;"></div>
       <div class="login-brand">EATDY</div>
       <p class="login-tagline">หาอาหารดีๆ ใกล้คุณ</p>
 
       <div style="width:100%; background:var(--surface); border-radius:var(--radius-xl); padding:24px; box-shadow:var(--shadow-md);">
-        <p style="text-align:center; font-size:16px; font-weight:800; margin-bottom:20px;">🐾 ยินดีต้อนรับ</p>
+        <p style="text-align:center; font-size:16px; font-weight:800; margin-bottom:20px;"><img src="Buddy_Omnom.png" style="width:20px; height:20px; object-fit:contain; vertical-align:middle;"> ยินดีต้อนรับ</p>
         <p style="text-align:center; font-size:13px; color:var(--text-secondary); margin-bottom:20px;">ค้นพบร้านอาหารดีๆ รอบตัวคุณ</p>
 
         <div class="form-group">
@@ -2167,7 +2273,7 @@ body {
 
       <!-- STEP 1 : Buddy -->
       <div class="onboard-step active" id="ob-step1">
-        <div class="onboard-title">🐾 เลือกบัดดี้ของคุณ</div>
+        <div class="onboard-title"><img src="Buddy_Omnom.png" style="width:20px; height:20px; object-fit:contain; vertical-align:middle;"> เลือกบัดดี้ของคุณ</div>
         <div class="onboard-subtitle">บัดดี้คนนี้จะอยู่กับคุณตลอดการเดินทาง!</div>
         <div class="buddy-grid">
           <div class="buddy-card selected" onclick="selectBuddy(this)">
@@ -2370,26 +2476,19 @@ body {
             🔔
             <span class="notif-dot"></span>
           </button>
-          <div class="score-pill">82 คะแนน = 0.82 บาท</div>
+          <div class="score-pill">82 คะแนน = 0.82 Point</div>
         </div>
       </div>
-
-      <div class="buddy-banner">
-        <div class="buddy-avatar">🐶</div>
-        <div class="buddy-message" style="flex:1;">
-          <div class="buddy-msg-title">ป็อปปี้ พร้อมช่วยแล้ว!</div>
-          <div class="buddy-msg-text">วันนี้คุณยังกินผักไม่พอ มีร้าน Healthy Bites ห่าง 320 ม. — เดิน 4 นาทีเอง!</div>
-          <div class="buddy-action-btns">
-            <button class="buddy-btn buddy-btn-primary" onclick="showPage('restaurant-detail')">ดูร้าน →</button>
-            <button class="buddy-btn buddy-btn-secondary">ไว้ทีหลัง</button>
-          </div>
-        </div>
       </div>
-    </div>
 
     <!-- Home Content -->
     <div class="home-content">
-
+    <div class="event-bar">
+  <img src="https://cdn.pixabay.com/photo/2022/03/24/13/31/flowers-7089083_1280.jpg" 
+       alt="Healthy Bites"
+       style="width:100%; height:100%; object-fit:cover; border-radius:var(--radius-full); position:absolute; top:0; left:0;">
+  <span style="font-size:18px; cursor:pointer; position:relative; z-index:1;" onclick="showPage('settings')"></span>
+</div>
       <!-- Search -->
       <div class="search-bar">
         <span>🔍</span>
@@ -2397,33 +2496,67 @@ body {
         <span style="font-size:18px; cursor:pointer;" onclick="showPage('settings')">⚙️</span>
       </div>
 
-      <!-- Manual Meal Log Button -->
-      <button class="manual-meal-btn" onclick="openManualMealModal()">
-        ✍️ บันทึกอาหารเอง
-      </button>
-
-
-      <!-- Tag bar -->
-      <div class="tag-bar">
-        <div class="chip active">ทั้งหมด</div>
-        <div class="chip">โปรตีนสูง</div>
-        <div class="chip">น้ำตาลต่ำ</div>
-        <div class="chip">ไขมันต่ำ</div>
-        <div class="chip">ไฟเบอร์สูง</div>
-        <div class="chip">คาร์บต่ำ</div>
-        <div class="chip">อิ่มนาน</div>
-        <div class="chip">มื้อดึก</div>
-      </div>
-
-      <!-- AI Recommendation Banner -->
-      <div style="background:linear-gradient(135deg,#1a1a2e,#16213e); border-radius:var(--radius-lg); padding:16px; color:white; cursor:pointer;" onclick="showPage('restaurant-detail')">
-        <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
-          <span style="font-size:20px;">🤖</span>
-          <span style="font-size:13px; font-weight:700; opacity:.85;">บัดดี้แนะนำให้คุณ ✨</span>
-          <span style="margin-left:auto; font-size:12px; opacity:.6;">›</span>
-        </div>
-        <p style="font-size:12px; opacity:.85; line-height:1.5;">วันนี้คุณยังกินผักไม่พอ มีร้าน Healthy Bites ห่าง 320 ม. — เดิน 4 นาทีเอง!</p>
-      </div>
+        <!-- Recommended Restaurant Card -->
+   <div class="reco-rest-wrap">
+  <div id="reco-rest-card" class="reco-rest-card" onclick="showRandomMenu()">
+    <div class="reco-rest-default">
+      <span class="reco-rest-icon">🍽️</span>
+      <span class="reco-rest-label">เมนูแนะนำ</span>
+    </div>
+  </div>
+  <div style="display:flex; flex-direction:column; gap:8px;">
+    <!-- ปุ่มปิ่นโต -->
+    <div onclick="showPage('pintoh')" style="
+      width:178.4px; height:60px;
+      border-radius:var(--radius-lg);
+      border:1.5px solid var(--border);
+      background:var(--surface);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:left;
+      gap:4px;
+      box-shadow:var(--shadow-sm);
+      transition:all var(--transition);
+      font-size:16px;
+      font-weight:700;
+      color:var(--primary-dark);
+    "
+    onmouseover="this.style.boxShadow='var(--shadow-md)'"
+    onmouseout="this.style.boxShadow='var(--shadow-sm)'">
+      <span style="font-size:20px;">🍱</span>
+      <span>ปิ่นโต</span>
+    </div>
+    <!-- ปุ่มเมนูยอดนิยม -->
+    <div onclick="showPage('popular')" style="
+      width:178.4px; height:60px;
+      border-radius:var(--radius-lg);
+      border:1.5px solid var(--border);
+      background:var(--surface);
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:right;
+      gap:4px;
+      box-shadow:var(--shadow-sm);
+      transition:all var(--transition);
+      font-size:16px;
+      font-weight:700;
+      color:var(--primary-dark);
+    "
+    onmouseover="this.style.boxShadow='var(--shadow-md)'"
+    onmouseout="this.style.boxShadow='var(--shadow-sm)'">
+      <span style="font-size:20px;">🔥</span>
+      <span>เมนูยอดนิยม</span>
+    </div>
+  </div>
+  <div class="reco-rest-sticker">
+    <img src="https://down-yuantu.pngtree.com/element_our/20211029/bg/82e065013ce26416806b80a138e9e5c0_90552.png?e=1781334335&st=ZTQxMTczYzJhMTE5ZmExMzgwZmNmOTRkNTExOGIxYTM&n=%E2%80%94Pngtree%E2%80%94cartoon+restaurant+cooking+delicious+food_6939398.png" alt="sticker">
+  </div>
+  <div class="reco-rest-sticker1">
+    <img src="UI_Pinto_Close.png" alt1="sticker1">
+  </div>
+</div>
 
       <!-- Food DNA -->
       <div class="dna-card">
@@ -2512,7 +2645,45 @@ body {
     </div>
 <button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
   </div><!-- /screen-home (home page) -->
+<!-- ============================================================
+     PINTOH PAGE
+============================================================ -->
+<div id="phone-wrapper-pintoh" style="display:none; width:100%; min-height:100vh; flex-direction:column;">
+<div class="phone" id="phone-pintoh">
+  <div class="screen" id="screen-pintoh">
 
+    <!-- Header -->
+    <div class="home-header">
+      <div class="header-top">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <button onclick="showPage('home')" style="background:none; border:none; font-size:22px; cursor:pointer;">←</button>
+          <div>
+            <div class="header-greeting">เมนูของฉัน</div>
+            <div class="header-name">ปิ่นโตสัปดาห์นี้<img src="UI_Pinto_Open.png" style="width:90px; height:90px; object-fit:contain;"></div>
+            
+          </div>
+        </div>
+        <div class="score-pill">สัปดาห์ที่ 24</div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="home-content" id="pintoh-content">
+      <!-- render โดย JS -->
+    </div>
+
+    <!-- Bottom Nav -->
+    <div class="bottom-nav">
+      <button class="nav-item" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
+      <button class="nav-item" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
+      <button class="nav-item" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
+      <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
+    </div>
+    <button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
+
+  </div>
+</div>
+</div>
   <!-- ============================================================
        PAGE: RESTAURANT DETAIL
   ============================================================ -->
@@ -3189,7 +3360,7 @@ body {
       <div class="profile-header">
         <div class="profile-avatar">🐶</div>
         <div class="profile-name">อเล็กซ์</div>
-        <div class="profile-subtitle">ปี 3 · วิศวกรรมศาสตร์ · มทส ✨</div>
+        <div class="profile-subtitle">ปี 3 · วิศวกรรมศาสตร์ · จุฬาฯ · มีพลัง ✨</div>
         <div class="profile-stats">
           <div class="profile-stat">
             <div class="ps-val" id="profile-stat-weight">65</div>
@@ -3244,7 +3415,7 @@ body {
 
         <!-- Food DNA -->
         <div class="profile-section">
-          <div class="profile-section-title">พฤติกรรมการกินของคุณ</div>
+          <div class="profile-section-title">🧬 Food DNA</div>
           <div class="dna-preview">
             <div class="dna-preview-title">82 · คะแนนความหลากหลาย</div>
             <div class="dna-preview-item"><span>🍽️ กินบ่อย:</span>ผัดกะเพรา, ก๋วยเตี๋ยว</div>
@@ -3404,7 +3575,36 @@ body {
     </div>
 <button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
   </div><!-- /screen-notif -->
+<!-- ============================================================
+     PAGE: POPULAR MENU
+============================================================ -->
+<div class="screen hidden" id="screen-popular">
+  <div class="page-header">
+    <button class="back-btn" onclick="showPage('home')">←</button>
+    <h2 style="flex:1;">🔥 เมนูยอดนิยม</h2>
+  </div>
 
+  <!-- Filter chips -->
+  <div style="padding:12px 16px 0; display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;">
+    <div class="chip active" onclick="filterPopular('all',this)">ทั้งหมด</div>
+    <div class="chip" onclick="filterPopular('protein',this)">💪 โปรตีนสูง</div>
+    <div class="chip" onclick="filterPopular('low-cal',this)">🥗 แคลต่ำ</div>
+    <div class="chip" onclick="filterPopular('budget',this)">💰 ประหยัด</div>
+    <div class="chip" onclick="filterPopular('veg',this)">🌿 มังสวิรัติ</div>
+  </div>
+
+  <div id="popular-menu-list" style="padding:12px 16px; display:flex; flex-direction:column; gap:12px; padding-bottom:80px;">
+    <!-- filled by JS -->
+  </div>
+
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
+    <button class="nav-item" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
+    <button class="nav-item" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
+    <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
+  </div>
+  <button class="chat-fab" onclick="toggleFloatingChat()">💭</button>
+</div>
   <!-- ============================================================
        SUCCESS MODAL  ← NEW
   ============================================================ -->
@@ -3519,6 +3719,214 @@ const state = {
   orderHistory: [],
   totalSpend: 0,
 };
+// ===== PINTOH DATA =====
+const pintohData = [
+  {
+    day: 'จันทร์', date: '9 มิ.ย.', dayEn: 'MON',
+    totalCal: 1420, targetCal: 1800,
+    status: 'done', // done | today | upcoming
+    meals: [
+      { time: '08.00', icon: '🍳', name: 'ข้าวไข่ดาว + ข้าวกล้อง', cal: 380, protein: 18, tags: ['โปรตีนสูง'] },
+      { time: '12.00', icon: '🥗', name: 'สลัดไก่ย่าง Healthy Bites', cal: 520, protein: 42, tags: ['Low Carb', 'แนะนำ'] },
+      { time: '18.00', icon: '🍜', name: 'ก๋วยเตี๋ยวต้มยำ ป้าแดง', cal: 520, protein: 28, tags: ['เผ็ด'] },
+    ]
+  },
+  {
+    day: 'อังคาร', date: '10 มิ.ย.', dayEn: 'TUE',
+    totalCal: 1650, targetCal: 1800,
+    status: 'done',
+    meals: [
+      { time: '08.40', icon: '🥣', name: 'โอ๊ตมีลผลไม้รวม', cal: 320, protein: 12, tags: ['Clean'] },
+      { time: '12.30', icon: '🍱', name: 'ข้าวหมูย่าง Bowl & Soul', cal: 680, protein: 38, tags: ['ยอดนิยม'] },
+      { time: '19.00', icon: '🐟', name: 'ปลานึ่งซีอิ๊ว + ผักบุ้ง', cal: 450, protein: 34, tags: ['โปรตีนสูง', 'Clean'] },
+      { time: 'ว่าง', icon: '🍎', name: 'แอปเปิ้ล + อัลมอนด์', cal: 200, protein: 5, tags: [] },
+    ]
+  },
+  {
+    day: 'พุธ', date: '11 มิ.ย.', dayEn: 'WED',
+    totalCal: 890, targetCal: 1800,
+    status: 'today',
+    meals: [
+      { time: '09.00', icon: '🍞', name: 'ขนมปังโฮลวีต + ไข่ต้ม', cal: 290, protein: 16, tags: ['Clean'] },
+      { time: '13.00', icon: '🍗', name: 'ข้าวมันไก่ (ไม่มีหนัง)', cal: 600, protein: 40, tags: ['แนะนำ'] },
+      { time: '18.40', icon: '❓', name: 'ยังไม่ได้เลือก', cal: 0, protein: 0, tags: ['เพิ่มเมนู'] },
+    ]
+  },
+  {
+    day: 'พฤหัส', date: '12 มิ.ย.', dayEn: 'THU',
+    totalCal: 0, targetCal: 1800,
+    status: 'upcoming',
+    meals: []
+  },
+  {
+    day: 'ศุกร์', date: '13 มิ.ย.', dayEn: 'FRI',
+    totalCal: 0, targetCal: 1800,
+    status: 'upcoming',
+    meals: []
+  },
+  {
+    day: 'เสาร์', date: '14 มิ.ย.', dayEn: 'SAT',
+    totalCal: 0, targetCal: 1800,
+    status: 'upcoming',
+    meals: []
+  },
+  {
+    day: 'อาทิตย์', date: '15 มิ.ย.', dayEn: 'SUN',
+    totalCal: 0, targetCal: 1800,
+    status: 'upcoming',
+    meals: []
+  },
+];
+
+let pintohSelectedDay = 2; // default = today (index 2 = พุธ)
+
+function renderPintoh() {
+  const container = document.getElementById('pintoh-content');
+  if (!container) return;
+
+  const statusColor = { done: '#4CAF50', today: '#FF9800', upcoming: '#9E9E9E' };
+  const statusLabel = { done: '✅ เสร็จแล้ว', today: '📍 วันนี้', upcoming: '🔒 กำลังจะมา' };
+
+  container.innerHTML = `
+    <!-- Day Selector Pills -->
+    <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; margin-bottom:16px;
+                scrollbar-width:none;">
+      ${pintohData.map((d, i) => `
+        <div onclick="pintohSelectedDay=${i}; renderPintoh()"
+          style="flex-shrink:0; min-width:52px; padding:8px 6px; border-radius:var(--radius-lg);
+                 text-align:center; cursor:pointer; transition:all 0.2s;
+                 background:${i === pintohSelectedDay ? 'var(--primary)' : 'var(--surface)'};
+                 border:1.5px solid ${i === pintohSelectedDay ? 'var(--primary)' : 'var(--border)'};
+                 box-shadow:${i === pintohSelectedDay ? '0 4px 12px rgba(76,175,80,0.35)' : 'var(--shadow-sm)'};">
+          <div style="font-size:9px; font-weight:700; color:${i === pintohSelectedDay ? 'rgba(255,255,255,0.8)' : 'var(--text-secondary)'};">
+            ${d.dayEn}
+          </div>
+          <div style="font-size:15px; font-weight:900; color:${i === pintohSelectedDay ? 'white' : 'var(--text-primary)'};">
+            ${d.date.split(' ')[0]}
+          </div>
+          <div style="width:6px; height:6px; border-radius:50%; margin:3px auto 0;
+                      background:${d.status === 'done' ? '#4CAF50' : d.status === 'today' ? '#FF9800' : 'transparent'};"></div>
+        </div>
+      `).join('')}
+    </div>
+
+    ${renderPintohDay(pintohData[pintohSelectedDay], pintohSelectedDay)}
+  `;
+}
+
+function renderPintohDay(d, idx) {
+  const calPct = Math.min(100, Math.round((d.totalCal / d.targetCal) * 100)) || 0;
+  const calColor = calPct >= 90 ? '#4CAF50' : calPct >= 60 ? '#FF9800' : '#64B5F6';
+
+  const tagStyle = (tag) => {
+    if (tag === 'เพิ่มเมนู') return 'background:#E8F5E9; color:#2E7D32; border:1px dashed #4CAF50;';
+    if (tag === 'แนะนำ') return 'background:#FFF8E1; color:#F57F17;';
+    if (tag === 'โปรตีนสูง') return 'background:#E3F2FD; color:#1565C0;';
+    if (tag === 'Low Carb') return 'background:#F3E5F5; color:#6A1B9A;';
+    return 'background:var(--surface-3); color:var(--text-secondary);';
+  };
+
+  if (d.status === 'upcoming') {
+    return `
+      <div style="background:var(--surface); border-radius:var(--radius-xl); border:1.5px dashed var(--border);
+                  padding:32px 20px; text-align:center;">
+        <div style="font-size:56px; margin-bottom:12px;">🍱</div>
+        <div style="font-size:17px; font-weight:800; color:var(--text-primary); margin-bottom:6px;">
+          วัน${d.day} ${d.date}
+        </div>
+        <div style="font-size:13px; color:var(--text-secondary); margin-bottom:20px;">
+          ยังไม่ได้วางแผนมื้ออาหาร
+        </div>
+        <button style="padding:12px 28px; border-radius:var(--radius-lg); border:none;
+                       background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+                       color:white; font-size:14px; font-weight:800; cursor:pointer;
+                       box-shadow:0 4px 12px rgba(76,175,80,0.35);">
+          + วางแผนมื้อนี้
+        </button>
+      </div>
+    `;
+  }
+
+  return `
+    <!-- วันที่ + Summary Bar -->
+    <div style="background:linear-gradient(135deg,var(--primary-bg),#C8E6C9); border-radius:var(--radius-xl);
+                padding:18px 16px; margin-bottom:14px;">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
+        <div>
+          <div style="font-size:19px; font-weight:900; color:var(--text-primary);">วัน${d.day} ${d.date}</div>
+          <div style="font-size:12px; color:var(--text-secondary); margin-top:2px;">
+            ${d.status === 'today' ? '📍 วันนี้' : '✅ เสร็จแล้ว'}
+          </div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:22px; font-weight:900; color:var(--primary-dark);">${d.totalCal}</div>
+          <div style="font-size:11px; color:var(--text-secondary);">/ ${d.targetCal} kcal</div>
+        </div>
+      </div>
+      <!-- Progress -->
+      <div style="background:rgba(255,255,255,0.6); border-radius:var(--radius-full); height:10px; overflow:hidden;">
+        <div style="width:${calPct}%; height:100%; background:${calColor};
+                    border-radius:var(--radius-full); transition:width 0.6s ease;"></div>
+      </div>
+      <div style="display:flex; justify-content:space-between; margin-top:6px;">
+        <span style="font-size:11px; color:var(--text-secondary);">${calPct}% ของเป้าหมาย</span>
+        <span style="font-size:11px; color:var(--text-secondary);">เหลือ ${d.targetCal - d.totalCal} kcal</span>
+      </div>
+    </div>
+
+    <!-- Meal List -->
+    <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+      ${d.meals.map((m, mi) => `
+        <div style="background:var(--surface); border-radius:var(--radius-lg);
+                    border:1px solid var(--border); box-shadow:var(--shadow-sm); overflow:hidden;
+                    ${m.cal === 0 ? 'border-style:dashed; opacity:0.8;' : ''}">
+          <div style="display:flex; align-items:center; gap:12px; padding:14px;">
+            <!-- Time Badge -->
+            <div style="flex-shrink:0; width:48px; text-align:center;">
+              <div style="font-size:22px;">${m.icon}</div>
+              <div style="font-size:9px; font-weight:800; color:var(--text-secondary); margin-top:2px;
+                          background:var(--surface-3); border-radius:var(--radius-full); padding:2px 4px;">
+                ${m.time}
+              </div>
+            </div>
+            <!-- Info -->
+            <div style="flex:1; min-width:0;">
+              <div style="font-size:14px; font-weight:800; color:var(--text-primary);
+                          white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+                ${m.name}
+              </div>
+              <div style="display:flex; gap:5px; flex-wrap:wrap; margin-top:5px;">
+                ${m.tags.map(t => `
+                  <span style="font-size:10px; padding:2px 8px; border-radius:var(--radius-full);
+                               font-weight:700; ${tagStyle(t)}">${t}</span>
+                `).join('')}
+              </div>
+            </div>
+            <!-- Cal -->
+            <div style="flex-shrink:0; text-align:right;">
+              ${m.cal > 0 ? `
+                <div style="font-size:15px; font-weight:900; color:var(--primary-dark);">${m.cal}</div>
+                <div style="font-size:10px; color:var(--text-secondary);">kcal</div>
+                <div style="font-size:10px; color:var(--text-secondary);">🥩 ${m.protein}ก.</div>
+              ` : `
+                <button style="padding:6px 10px; border-radius:var(--radius-md); border:1px dashed var(--primary);
+                               background:var(--primary-bg); color:var(--primary-dark); font-size:11px;
+                               font-weight:800; cursor:pointer;">+ เพิ่ม</button>
+              `}
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- Add Meal Button -->
+    <button style="width:100%; padding:13px; border-radius:var(--radius-lg); border:1.5px dashed var(--primary);
+                   background:var(--primary-bg); color:var(--primary-dark); font-size:14px;
+                   font-weight:800; cursor:pointer; margin-bottom:8px;">
+      + เพิ่มมื้ออาหาร
+    </button>
+  `;
+}
 
 /* ==============================================
    PHONE SWITCHER
@@ -3553,22 +3961,41 @@ showPhone(1);
 /* ==============================================
    PAGE ROUTER (within Phone 3)
 ============================================== */
-const pages = ['home','restaurant-detail','menu-detail','map','chat','stats','profile','notif','settings'];
-
+const pages = ['home','restaurant-detail','menu-detail','map','chat','stats','profile','notif','settings','popular'];
 function showPage(page) {
+  // ซ่อน pages ทั่วไป
   pages.forEach(p => {
     const el = document.getElementById(`screen-${p}`);
     if (el) el.classList.add('hidden');
   });
-  const target = document.getElementById(`screen-${page}`);
-  if (target) {
-    target.classList.remove('hidden');
-    target.scrollTop = 0;
+  
+  // ซ่อน pintoh page ด้วย
+  const pintohWrapper = document.getElementById('phone-wrapper-pintoh');
+  if (pintohWrapper) pintohWrapper.style.display = 'none';
+  
+  // แสดง screen ที่เลือก
+  if (page === 'pintoh') {
+    // Special case: pintoh เป็นหน้าเต็ม phone
+    if (pintohWrapper) {
+      pintohWrapper.style.display = 'flex';
+      renderPintoh();
+    }
+  } else {
+    const target = document.getElementById(`screen-${page}`);
+    if (target) {
+      target.classList.remove('hidden');
+      target.scrollTop = 0;
+    }
   }
+  
   state.currentPage = page;
   updateNavActive(page);
 }
-
+function goToRestaurantDetail(name) {
+  const nameEl = document.getElementById('rest-detail-name');
+  if (nameEl) nameEl.textContent = name;
+  showPage('restaurant-detail');
+}
 /* ==============================================
    MAP -> RESTAURANT DETAIL
 ============================================== */
@@ -4072,13 +4499,265 @@ function showTip(msg, duration = 2500) {
   tip.classList.add('show');
   setTimeout(() => tip.classList.remove('show'), duration);
 }
+/* ==============================================
+   RANDOM MENU
+============================================== */
+const randomMenus = [
+  {
+    name: 'สลัดอกไก่ย่าง', restaurant: 'Healthy Bites', price: '฿95',
+    emoji: '🥗', desc: 'อกไก่ย่างไร้หนัง ผักสลัดสด มะเขือเทศ ไข่ต้ม ซอสน้ำใสสไตล์ญี่ปุ่น โปรตีนสูง ไขมันต่ำ',
+    cal: '320 kcal', protein: '32 ก.', carb: '18 ก.', fat: '8 ก.', fiber: '6 ก.', sodium: '380 มก.', sugar: '4 ก.',
+    tags: [['โปรตีนสูง','green'],['ไขมันต่ำ','green'],['ไฟเบอร์ 6ก.','green'],['โซเดียม 380มก.','orange']],
+    score: 'คะแนนสุขภาพดีเยี่ยม 🌟', scoreDesc: 'โปรตีนสูง ไขมันต่ำ ผักเยอะ เหมาะกับเป้าหมายของคุณ'
+  },
+  {
+    name: 'ข้าวกล้องไก่ต้ม', restaurant: 'Healthy Bites', price: '฿85',
+    emoji: '🍚', desc: 'ข้าวกล้อง ไก่ต้มฉีก ผักลวก น้ำซุปใส คาร์บเชิงซ้อน อิ่มนาน',
+    cal: '380 kcal', protein: '28 ก.', carb: '52 ก.', fat: '6 ก.', fiber: '4 ก.', sodium: '420 มก.', sugar: '2 ก.',
+    tags: [['โปรตีนสูง','green'],['อิ่มนาน','blue'],['คาร์บดี','green']],
+    score: 'คะแนนสุขภาพดี 💪', scoreDesc: 'ข้าวกล้องให้พลังงานสม่ำเสมอ เหมาะกับคนออกกำลังกาย'
+  },
+  {
+    name: 'โอ๊ตมีลหน้าผลไม้', restaurant: 'Healthy Bites', price: '฿75',
+    emoji: '🥣', desc: 'โอ๊ตมีล กล้วย บลูเบอร์รี่ โยเกิร์ต น้ำผึ้งเล็กน้อย ไฟเบอร์สูง',
+    cal: '280 kcal', protein: '10 ก.', carb: '48 ก.', fat: '5 ก.', fiber: '8 ก.', sodium: '120 มก.', sugar: '18 ก.',
+    tags: [['ไฟเบอร์สูง','green'],['น้ำตาลปานกลาง','orange']],
+    score: 'คะแนนสุขภาพดี 🌿', scoreDesc: 'ไฟเบอร์สูง ช่วยระบบย่อยอาหาร แต่ระวังน้ำตาลจากผลไม้'
+  },
+  {
+    name: 'ไข่ออมเล็ตผัก', restaurant: 'Healthy Bites', price: '฿80',
+    emoji: '🍳', desc: 'ไข่ 3 ฟอง ผักรวม เห็ดหอม ปรุงรสเบาๆ โปรตีนสูง คาร์บต่ำ',
+    cal: '260 kcal', protein: '24 ก.', carb: '6 ก.', fat: '16 ก.', fiber: '2 ก.', sodium: '340 มก.', sugar: '3 ก.',
+    tags: [['โปรตีนสูง','green'],['คาร์บต่ำ','green']],
+    score: 'คะแนนสุขภาพดีมาก 🥚', scoreDesc: 'โปรตีนสูงจากไข่ คาร์บต่ำ เหมาะกับคนลดน้ำหนัก'
+  },
+  {
+    name: 'ก๋วยเตี๋ยวน้ำใสไก่', restaurant: 'ก๋วยเตี๋ยวป้าแดง', price: '฿55',
+    emoji: '🍜', desc: 'ก๋วยเตี๋ยวเส้นเล็ก น้ำซุปไก่ใส ไก่ฉีก ผักบุ้ง ไม่ใส่ผงชูรส',
+    cal: '310 kcal', protein: '22 ก.', carb: '44 ก.', fat: '4 ก.', fiber: '2 ก.', sodium: '680 มก.', sugar: '2 ก.',
+    tags: [['โซเดียมปานกลาง','orange'],['โปรตีนดี','green'],['ราคาประหยัด','blue']],
+    score: 'คะแนนสุขภาพพอใช้ 🍜', scoreDesc: 'โซเดียมค่อนข้างสูง ควรดื่มน้ำเพิ่ม'
+  },
+  {
+    name: 'บาวล์ปลาแซลมอน', restaurant: 'Bowl & Soul', price: '฿145',
+    emoji: '🐟', desc: 'ข้าวญี่ปุ่น ปลาแซลมอนดิบ อโวคาโด แตงกวา ซอสญี่ปุ่น โอเมก้า 3 สูง',
+    cal: '420 kcal', protein: '30 ก.', carb: '48 ก.', fat: '14 ก.', fiber: '5 ก.', sodium: '510 มก.', sugar: '6 ก.',
+    tags: [['โอเมก้า 3','green'],['โปรตีนสูง','green'],['ไขมันดี','green']],
+    score: 'คะแนนสุขภาพดีเยี่ยม ⭐', scoreDesc: 'ปลาแซลมอนอุดมไปด้วยโอเมก้า 3 ดีต่อหัวใจและสมอง'
+  },
+];
 
+function showRandomMenu() {
+  const menu = randomMenus[Math.floor(Math.random() * randomMenus.length)];
+
+  // อัปเดตข้อมูลใน menu-detail page
+  document.querySelector('.menu-detail-name').textContent      = menu.name;
+  document.querySelector('.menu-detail-restaurant').textContent = menu.restaurant;
+  document.querySelector('.menu-detail-price').textContent      = menu.price;
+  document.querySelector('.menu-detail-desc').textContent       = menu.desc;
+  document.querySelector('.menu-detail-hero').style.fontSize    = '80px';
+  document.querySelector('.menu-detail-hero').childNodes[0].textContent = menu.emoji;
+
+  // Health score
+  document.querySelector('.score-title').textContent = menu.score;
+  document.querySelector('.score-desc').textContent  = menu.scoreDesc;
+
+  // Tags
+  const tagGroup = document.querySelector('.chip-group');
+  tagGroup.innerHTML = menu.tags.map(([label, color]) => {
+    const style = color === 'orange'
+      ? `border-color:var(--secondary); color:#E65100;`
+      : color === 'blue'
+        ? `border-color:var(--accent); color:var(--accent);`
+        : '';
+    const cls = style ? 'chip' : 'chip active';
+    return `<div class="${cls}" style="cursor:default; ${style}">${label}</div>`;
+  }).join('');
+
+  // Nutrition table
+  const rows = [
+    ['พลังงาน', menu.cal], ['โปรตีน', menu.protein], ['คาร์โบไฮเดรต', menu.carb],
+    ['ไขมัน', menu.fat], ['น้ำตาล', menu.sugar], ['ไฟเบอร์', menu.fiber], ['โซเดียม', menu.sodium]
+  ];
+  document.querySelector('.nutrition-full-table').innerHTML = rows.map(([n, v]) =>
+    `<div class="nutrition-row"><span class="n-name">${n}</span><span class="n-amount">${v}</span></div>`
+  ).join('');
+
+  // อัปเดต order section
+  document.querySelector('.order-section-body > div > div:last-child').textContent = menu.name;
+  state.basePrice = parseInt(menu.price.replace('฿', ''));
+  recalcTotal();
+
+  showPage('menu-detail');
+}
+/* ==============================================
+   POPULAR MENU PAGE
+============================================== */
+const popularMenuData = [
+  { name:'สลัดอกไก่ย่าง', restaurant:'Healthy Bites', price:95, emoji:'🥗',
+    cal:320, protein:32, tags:['โปรตีนสูง','ไขมันต่ำ'], rating:4.8, orders:248,
+    badge:'🏆 อันดับ 1', badgeColor:'#FF9800', category:['all','protein','low-cal'] },
+  { name:'ข้าวกล้องไก่ต้ม', restaurant:'Healthy Bites', price:85, emoji:'🍚',
+    cal:380, protein:28, tags:['อิ่มนาน','คาร์บดี'], rating:4.7, orders:196,
+    badge:'🔥 Hot', badgeColor:'#F44336', category:['all','protein','budget'] },
+  { name:'บาวล์ปลาแซลมอน', restaurant:'Bowl & Soul', price:145, emoji:'🐟',
+    cal:420, protein:30, tags:['โอเมก้า 3','ไขมันดี'], rating:4.9, orders:182,
+    badge:'⭐ Top Pick', badgeColor:'#4CAF50', category:['all','protein'] },
+  { name:'โอ๊ตมีลหน้าผลไม้', restaurant:'Healthy Bites', price:75, emoji:'🥣',
+    cal:280, protein:10, tags:['ไฟเบอร์สูง','มังสวิรัติ'], rating:4.6, orders:154,
+    badge:'🌿 Vegan', badgeColor:'#4CAF50', category:['all','low-cal','budget','veg'] },
+  { name:'ไข่ออมเล็ตผัก', restaurant:'Healthy Bites', price:80, emoji:'🍳',
+    cal:260, protein:24, tags:['โปรตีนสูง','คาร์บต่ำ'], rating:4.5, orders:143,
+    badge:'💪 Fit', badgeColor:'#2196F3', category:['all','protein','low-cal','budget'] },
+  { name:'ก๋วยเตี๋ยวน้ำใสไก่', restaurant:'ก๋วยเตี๋ยวป้าแดง', price:55, emoji:'🍜',
+    cal:310, protein:22, tags:['ราคาประหยัด','น้ำซุปใส'], rating:4.5, orders:312,
+    badge:'💰 Best Value', badgeColor:'#FF9800', category:['all','budget'] },
+  { name:'สมูทตี้โบวล์ผลไม้', restaurant:'Bowl & Soul', price:120, emoji:'🍓',
+    cal:240, protein:8, tags:['มังสวิรัติ','แคลต่ำ'], rating:4.7, orders:98,
+    badge:'🌿 Fresh', badgeColor:'#4CAF50', category:['all','low-cal','veg'] },
+  { name:'ข้าวหน้าไข่ดาวปลาแซลมอน', restaurant:'Bowl & Soul', price:135, emoji:'🍣',
+    cal:450, protein:35, tags:['โปรตีนสูง','อิ่มนาน'], rating:4.8, orders:167,
+    badge:'🔥 Trending', badgeColor:'#F44336', category:['all','protein'] },
+];
+
+function renderPopularMenu(filter) {
+  const list = document.getElementById('popular-menu-list');
+  if (!list) return;
+  const filtered = filter === 'all'
+    ? popularMenuData
+    : popularMenuData.filter(m => m.category.includes(filter));
+
+  if (!filtered.length) {
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon">🍽️</div><div class="empty-title">ไม่พบเมนูในหมวดนี้</div></div>';
+    return;
+  }
+
+  const top = filtered[0];
+  const topIdx = popularMenuData.indexOf(top);
+  const rest = filtered.slice(1);
+
+  list.innerHTML = `
+    <!-- Hero Card อันดับ 1 -->
+    <div style="background:linear-gradient(135deg,var(--primary-bg),#C8E6C9); border-radius:var(--radius-xl);
+                padding:28px 20px; text-align:center; position:relative; overflow:hidden; margin-bottom:4px;">
+      <div style="position:absolute;top:-20px;right:-20px;width:120px;height:120px;border-radius:50%;
+                  background:rgba(76,175,80,0.12);"></div>
+      <div style="display:inline-block; background:${top.badgeColor}; color:white; font-size:11px; font-weight:800;
+                  padding:4px 14px; border-radius:var(--radius-full); margin-bottom:10px;">
+        ${top.badge}
+      </div>
+      <div style="font-size:88px; line-height:1; margin-bottom:10px; filter:drop-shadow(0 4px 8px rgba(0,0,0,0.15));">
+        ${top.emoji}
+      </div>
+      <div style="font-size:22px; font-weight:900; color:var(--text-primary); margin-bottom:4px;">${top.name}</div>
+      <div style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">📍 ${top.restaurant}</div>
+      <div style="display:flex; justify-content:center; gap:16px; margin-bottom:16px;">
+        <div style="text-align:center;">
+          <div style="font-size:16px; font-weight:800; color:var(--text-primary);">${top.cal}</div>
+          <div style="font-size:10px; color:var(--text-secondary);">kcal</div>
+        </div>
+        <div style="width:1px; background:var(--border);"></div>
+        <div style="text-align:center;">
+          <div style="font-size:16px; font-weight:800; color:var(--text-primary);">${top.protein}ก.</div>
+          <div style="font-size:10px; color:var(--text-secondary);">โปรตีน</div>
+        </div>
+        <div style="width:1px; background:var(--border);"></div>
+        <div style="text-align:center;">
+          <div style="font-size:16px; font-weight:800; color:var(--text-primary);">⭐ ${top.rating}</div>
+          <div style="font-size:10px; color:var(--text-secondary);">${top.orders} ออเดอร์</div>
+        </div>
+      </div>
+      <div style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap; margin-bottom:16px;">
+        ${top.tags.map(t => `<span style="font-size:12px; padding:4px 12px; border-radius:var(--radius-full);
+          background:white; color:var(--primary-dark); font-weight:700;">${t}</span>`).join('')}
+      </div>
+      <div style="font-size:28px; font-weight:900; color:var(--primary-dark); margin-bottom:14px;">฿${top.price}</div>
+      <button onclick="loadPopularMenuDetail(${topIdx})"
+        style="width:100%; padding:14px; border-radius:var(--radius-lg); border:none;
+               background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+               color:white; font-size:14px; font-weight:800; cursor:pointer;
+               box-shadow:0 4px 12px rgba(76,175,80,0.4);">
+        🛒 ดูเมนูนี้
+      </button>
+    </div>
+
+    <!-- หัวข้อลิสต์ -->
+    ${rest.length ? `<div style="font-size:13px; font-weight:700; color:var(--text-secondary); 
+      text-transform:uppercase; letter-spacing:0.5px; padding:4px 2px 8px;">เมนูยอดนิยมอื่นๆ</div>` : ''}
+
+    <!-- ลิสต์อันดับที่เหลือ -->
+    ${rest.map((m, i) => {
+      const idx = popularMenuData.indexOf(m);
+      return `
+      <div onclick="loadPopularMenuDetail(${idx})"
+        style="background:var(--surface); border-radius:var(--radius-lg); border:1px solid var(--border);
+               box-shadow:var(--shadow-sm); overflow:hidden; cursor:pointer; transition:all 0.2s ease;"
+        onmouseover="this.style.boxShadow='var(--shadow-md)'; this.style.transform='translateY(-2px)'"
+        onmouseout="this.style.boxShadow='var(--shadow-sm)'; this.style.transform='none'">
+        <div style="display:flex; gap:12px; padding:14px; align-items:center;">
+          <!-- อันดับ + Emoji -->
+          <div style="position:relative; flex-shrink:0;">
+            <div style="width:56px; height:56px; background:var(--surface-3); border-radius:var(--radius-md);
+                        display:flex; align-items:center; justify-content:center; font-size:28px;">
+              ${m.emoji}
+            </div>
+            <div style="position:absolute; top:-6px; left:-6px; background:${m.badgeColor};
+                        color:white; font-size:9px; font-weight:800; padding:2px 6px;
+                        border-radius:var(--radius-full); white-space:nowrap; box-shadow:0 2px 6px rgba(0,0,0,0.2);">
+              ${m.badge}
+            </div>
+          </div>
+          <!-- Info -->
+          <div style="flex:1; min-width:0;">
+            <div style="font-size:14px; font-weight:800; color:var(--text-primary); 
+                        white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">
+              ${m.name}
+            </div>
+            <div style="font-size:11px; color:var(--text-secondary); margin-top:2px;">📍 ${m.restaurant}</div>
+            <div style="display:flex; gap:8px; margin-top:4px; align-items:center;">
+              <span style="font-size:11px; color:var(--text-secondary);">⭐ ${m.rating}</span>
+              <span style="font-size:11px; color:var(--text-secondary);">🔥 ${m.orders} ออเดอร์</span>
+              <span style="font-size:11px; color:var(--text-secondary);">${m.cal} kcal</span>
+            </div>
+          </div>
+          <!-- ราคา -->
+          <div style="flex-shrink:0; text-align:right;">
+            <div style="font-size:17px; font-weight:900; color:var(--primary-dark);">฿${m.price}</div>
+            <div style="font-size:10px; color:var(--text-secondary); margin-top:2px;">โปรตีน ${m.protein}ก.</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function filterPopular(filter, el) {
+  document.querySelectorAll('#screen-popular .chip').forEach(c => c.classList.remove('active'));
+  if (el) el.classList.add('active');
+  renderPopularMenu(filter);
+}
+
+function loadPopularMenuDetail(index) {
+  const m = popularMenuData[index];
+  // Map to existing menu-detail page
+  document.querySelector('.menu-detail-name').textContent = m.name;
+  document.querySelector('.menu-detail-restaurant').textContent = m.restaurant;
+  document.querySelector('.menu-detail-price').textContent = `฿${m.price}`;
+  document.querySelector('.menu-detail-desc').textContent = m.tags.join(' · ') + ` · ${m.cal} kcal · โปรตีน ${m.protein}ก.`;
+  document.querySelector('.menu-detail-hero').childNodes[0].textContent = m.emoji;
+  document.querySelector('.score-title').textContent = '⭐ ' + m.rating + ' · ' + m.orders + ' ออเดอร์';
+  document.querySelector('.score-desc').textContent = m.tags.join(', ');
+  state.basePrice = m.price;
+  recalcTotal();
+  showPage('menu-detail');
+}
 /* ==============================================
    INIT
 ============================================== */
 // Default channel: pickup selected, delivery hidden
 selectChannel('pickup');
 recalcTotal();
+renderPopularMenu('all');
 </script>
 </body>
 </html>
