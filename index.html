@@ -53,7 +53,7 @@ body {
   /* ============================================================
      PHONE FRAME — responsive, no decorative border
   ============================================================ */
-  .phone {
+ .phone {
     width: 100%;
     min-height: 100vh;
     background: var(--surface);
@@ -2215,10 +2215,11 @@ body {
 }
 </style>
 </head>
+<body>
 <button class="chat-fab" onclick="toggleFloatingChat()">
   <img class="buddy-fab-img" src="https://i.ibb.co/dx638Nn/Buddy-Mummum.png" 
        style="width:70px; height:70px; object-fit:contain; vertical-align:middle;">
-</button><body>
+</button>
 
 <!-- ============================================================
      PHONE 1 : LOGIN
@@ -2695,11 +2696,8 @@ body {
       <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
     </div>
     <button class="chat-fab" onclick="toggleFloatingChat()">
-  <button class="chat-fab" onclick="toggleFloatingChat()">
-  <img class="buddy-fab-img" src="https://i.ibb.co/dx638Nn/Buddy-Mummum.png" 
-       style="width:80px; height:80px; object-fit:contain; vertical-align:middle;">
-</button>
-</button>
+      <img class="buddy-fab-img" src="https://i.ibb.co/dx638Nn/Buddy-Mummum.png" 
+        style="width:80px; height:80px; object-fit:contain; vertical-align:middle;"></button>
 
   </div>
 </div>
@@ -3575,7 +3573,7 @@ body {
   <img class="buddy-fab-img" src="https://i.ibb.co/dx638Nn/Buddy-Mummum.png" 
        style="width:80px; height:80px; object-fit:contain; vertical-align:middle;">
 </button>
-
+  </div><!-- /screen-profile -->
   <!-- ============================================================
        PAGE: NOTIFICATIONS
   ============================================================ -->
@@ -3643,39 +3641,35 @@ body {
 </button>
   </div><!-- /screen-notif -->
 
-<!-- ============================================================
-     PAGE: POPULAR MENU
-============================================================ -->
-<div class="screen hidden" id="screen-popular">
-  <div class="page-header">
-    <button class="back-btn" onclick="showPage('home')">←</button>
-    <h2 style="flex:1;">🔥 เมนูยอดนิยม</h2>
-  </div>
+  <!-- ============================================================
+       PAGE: POPULAR MENU
+  ============================================================ -->
+  <div class="screen hidden" id="screen-popular">
+    <div class="page-header">
+      <button class="back-btn" onclick="showPage('home')">←</button>
+      <h2 style="flex:1;">🔥 เมนูยอดนิยม</h2>
+    </div>
+    <div style="padding:12px 16px 0; display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;">
+      <div class="chip active" onclick="filterPopular('all',this)">ทั้งหมด</div>
+      <div class="chip" onclick="filterPopular('protein',this)">💪 โปรตีนสูง</div>
+      <div class="chip" onclick="filterPopular('low-cal',this)">🥗 แคลต่ำ</div>
+      <div class="chip" onclick="filterPopular('budget',this)">💰 ประหยัด</div>
+      <div class="chip" onclick="filterPopular('veg',this)">🌿 มังสวิรัติ</div>
+    </div>
+    <div id="popular-menu-list" style="padding:12px 16px; display:flex; flex-direction:column; gap:12px; padding-bottom:80px;"></div>
+    <div class="bottom-nav">
+      <button class="nav-item active" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
+      <button class="nav-item" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
+      <button class="nav-item" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
+      <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
+    </div>
+    <button class="chat-fab" onclick="toggleFloatingChat()">
+      <img class="buddy-fab-img" src="https://i.ibb.co/dx638Nn/Buddy-Mummum.png" 
+           style="width:80px; height:80px; object-fit:contain; vertical-align:middle;">
+    </button>
+  </div><!-- /screen-popular -->
 
-  <!-- Filter chips -->
-  <div style="padding:12px 16px 0; display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;">
-    <div class="chip active" onclick="filterPopular('all',this)">ทั้งหมด</div>
-    <div class="chip" onclick="filterPopular('protein',this)">💪 โปรตีนสูง</div>
-    <div class="chip" onclick="filterPopular('low-cal',this)">🥗 แคลต่ำ</div>
-    <div class="chip" onclick="filterPopular('budget',this)">💰 ประหยัด</div>
-    <div class="chip" onclick="filterPopular('veg',this)">🌿 มังสวิรัติ</div>
-  </div>
 
-  <div id="popular-menu-list" style="padding:12px 16px; display:flex; flex-direction:column; gap:12px; padding-bottom:80px;">
-    <!-- filled by JS -->
-  </div>
-
-  <div class="bottom-nav">
-    <button class="nav-item active" onclick="showPage('home')"><span class="nav-icon">🏠</span><span class="nav-label">หน้าหลัก</span></button>
-    <button class="nav-item" onclick="showPage('map')"><span class="nav-icon">🗺️</span><span class="nav-label">แผนที่</span></button>
-    <button class="nav-item" onclick="showPage('stats')"><span class="nav-icon">📊</span><span class="nav-label">สรุป</span></button>
-    <button class="nav-item" onclick="showPage('profile')"><span class="nav-icon">👤</span><span class="nav-label">โปรไฟล์</span></button>
-  </div>
-<button class="chat-fab" onclick="toggleFloatingChat()">
-  <img class="buddy-fab-img" src="https://i.ibb.co/dx638Nn/Buddy-Mummum.png" 
-       style="width:80px; height:80px; object-fit:contain; vertical-align:middle;">
-</button>
-</div>
   <!-- ============================================================
        SUCCESS MODAL  ← NEW
   ============================================================ -->
@@ -4067,7 +4061,6 @@ function showPage(page) {
       target.scrollTop = 0;
     }
   }
-  
   state.currentPage = page;
   updateNavActive(page);
 }
@@ -4597,7 +4590,7 @@ function addOrderNotif(order) {
    CHAT
 ============================================== */
 const chatResponses = {
-  '💰 เมนูประหยัด': 'เมนูประหยัดวันนี้: 🍱 ข้าวกล้องไก่ต้ม ฿85 · 🥗 สลัดอกไก่ ฿95 ทั้งคู่อยู่ในงบ 100 บาท ✨',
+  '💰 เมนูประหยัด': 'เมนูประหยัดวันนี้: 🍱 ข้าวกล้องไก่ต้ม ฿40 · 🥗 สลัดอกไก่ ฿55 ทั้งคู่อยู่ในงบ 95 บาท ✨',
   '💪 โปรตีนสูง':  'เมนูโปรตีนสูงแนะนำ: 🥗 สลัดอกไก่ย่าง (32ก.) · 🍳 ไข่ออมเล็ตผัก (24ก.) ทานเสริมกล้ามเนื้อได้ดีมาก 💪',
   '🌙 เมนูดึก':    'เมนูดึกที่ไม่หนักเกินไป: 🥗 สลัดเบาๆ หรือ 🍜 ก๋วยเตี๋ยวน้ำใส หลีกเลี่ยงของมัน/หวานก่อนนอนนะ 🌙',
   '🍚 อิ่มนาน':    'อยากอิ่มนาน ลอง: 🍚 ข้าวกล้องไก่ต้ม — คาร์บเชิงซ้อน + โปรตีน ทำให้อิ่มได้นาน 4-5 ชั่วโมง ✨',
@@ -4643,42 +4636,42 @@ function showTip(msg, duration = 2500) {
 ============================================== */
 const randomMenus = [
   {
-    name: 'สลัดอกไก่ย่าง', restaurant: 'Healthy Bites', price: '฿95',
+    name: 'สลัดอกไก่ย่าง', restaurant: 'Healthy Bites', price: '฿55',
     emoji: '🥗', desc: 'อกไก่ย่างไร้หนัง ผักสลัดสด มะเขือเทศ ไข่ต้ม ซอสน้ำใสสไตล์ญี่ปุ่น โปรตีนสูง ไขมันต่ำ',
     cal: '320 kcal', protein: '32 ก.', carb: '18 ก.', fat: '8 ก.', fiber: '6 ก.', sodium: '380 มก.', sugar: '4 ก.',
     tags: [['โปรตีนสูง','green'],['ไขมันต่ำ','green'],['ไฟเบอร์ 6ก.','green'],['โซเดียม 380มก.','orange']],
     score: 'คะแนนสุขภาพดีเยี่ยม 🌟', scoreDesc: 'โปรตีนสูง ไขมันต่ำ ผักเยอะ เหมาะกับเป้าหมายของคุณ'
   },
   {
-    name: 'ข้าวกล้องไก่ต้ม', restaurant: 'Healthy Bites', price: '฿85',
+    name: 'ข้าวกล้องไก่ต้ม', restaurant: 'Healthy Bites', price: '฿40',
     emoji: '🍚', desc: 'ข้าวกล้อง ไก่ต้มฉีก ผักลวก น้ำซุปใส คาร์บเชิงซ้อน อิ่มนาน',
     cal: '380 kcal', protein: '28 ก.', carb: '52 ก.', fat: '6 ก.', fiber: '4 ก.', sodium: '420 มก.', sugar: '2 ก.',
     tags: [['โปรตีนสูง','green'],['อิ่มนาน','blue'],['คาร์บดี','green']],
     score: 'คะแนนสุขภาพดี 💪', scoreDesc: 'ข้าวกล้องให้พลังงานสม่ำเสมอ เหมาะกับคนออกกำลังกาย'
   },
   {
-    name: 'โอ๊ตมีลหน้าผลไม้', restaurant: 'Healthy Bites', price: '฿75',
+    name: 'โอ๊ตมีลหน้าผลไม้', restaurant: 'Healthy Bites', price: '฿65',
     emoji: '🥣', desc: 'โอ๊ตมีล กล้วย บลูเบอร์รี่ โยเกิร์ต น้ำผึ้งเล็กน้อย ไฟเบอร์สูง',
     cal: '280 kcal', protein: '10 ก.', carb: '48 ก.', fat: '5 ก.', fiber: '8 ก.', sodium: '120 มก.', sugar: '18 ก.',
     tags: [['ไฟเบอร์สูง','green'],['น้ำตาลปานกลาง','orange']],
     score: 'คะแนนสุขภาพดี 🌿', scoreDesc: 'ไฟเบอร์สูง ช่วยระบบย่อยอาหาร แต่ระวังน้ำตาลจากผลไม้'
   },
   {
-    name: 'ไข่ออมเล็ตผัก', restaurant: 'Healthy Bites', price: '฿80',
+    name: 'ไข่ออมเล็ตผัก', restaurant: 'Healthy Bites', price: '฿40',
     emoji: '🍳', desc: 'ไข่ 3 ฟอง ผักรวม เห็ดหอม ปรุงรสเบาๆ โปรตีนสูง คาร์บต่ำ',
     cal: '260 kcal', protein: '24 ก.', carb: '6 ก.', fat: '16 ก.', fiber: '2 ก.', sodium: '340 มก.', sugar: '3 ก.',
     tags: [['โปรตีนสูง','green'],['คาร์บต่ำ','green']],
     score: 'คะแนนสุขภาพดีมาก 🥚', scoreDesc: 'โปรตีนสูงจากไข่ คาร์บต่ำ เหมาะกับคนลดน้ำหนัก'
   },
   {
-    name: 'ก๋วยเตี๋ยวน้ำใสไก่', restaurant: 'ก๋วยเตี๋ยวป้าแดง', price: '฿55',
+    name: 'ก๋วยเตี๋ยวน้ำใสไก่', restaurant: 'ก๋วยเตี๋ยวป้าแดง', price: '฿45',
     emoji: '🍜', desc: 'ก๋วยเตี๋ยวเส้นเล็ก น้ำซุปไก่ใส ไก่ฉีก ผักบุ้ง ไม่ใส่ผงชูรส',
     cal: '310 kcal', protein: '22 ก.', carb: '44 ก.', fat: '4 ก.', fiber: '2 ก.', sodium: '680 มก.', sugar: '2 ก.',
     tags: [['โซเดียมปานกลาง','orange'],['โปรตีนดี','green'],['ราคาประหยัด','blue']],
     score: 'คะแนนสุขภาพพอใช้ 🍜', scoreDesc: 'โซเดียมค่อนข้างสูง ควรดื่มน้ำเพิ่ม'
   },
   {
-    name: 'บาวล์ปลาแซลมอน', restaurant: 'Bowl & Soul', price: '฿145',
+    name: 'บาวล์ปลาแซลมอน', restaurant: 'Bowl & Soul', price: '฿80',
     emoji: '🐟', desc: 'ข้าวญี่ปุ่น ปลาแซลมอนดิบ อโวคาโด แตงกวา ซอสญี่ปุ่น โอเมก้า 3 สูง',
     cal: '420 kcal', protein: '30 ก.', carb: '48 ก.', fat: '14 ก.', fiber: '5 ก.', sodium: '510 มก.', sugar: '6 ก.',
     tags: [['โอเมก้า 3','green'],['โปรตีนสูง','green'],['ไขมันดี','green']],
@@ -4733,28 +4726,28 @@ function showRandomMenu() {
    POPULAR MENU PAGE
 ============================================== */
 const popularMenuData = [
-  { name:'สลัดอกไก่ย่าง', restaurant:'Healthy Bites', price:95, emoji:'🥗',
+  { name:'สลัดอกไก่ย่าง', restaurant:'Healthy Bites', price:55, emoji:'🥗',
     cal:320, protein:32, tags:['โปรตีนสูง','ไขมันต่ำ'], rating:4.8, orders:248,
     badge:'🏆 อันดับ 1', badgeColor:'#FF9800', category:['all','protein','low-cal'] },
-  { name:'ข้าวกล้องไก่ต้ม', restaurant:'Healthy Bites', price:85, emoji:'🍚',
+  { name:'ข้าวกล้องไก่ต้ม', restaurant:'Healthy Bites', price:40, emoji:'🍚',
     cal:380, protein:28, tags:['อิ่มนาน','คาร์บดี'], rating:4.7, orders:196,
     badge:'🔥 Hot', badgeColor:'#F44336', category:['all','protein','budget'] },
-  { name:'บาวล์ปลาแซลมอน', restaurant:'Bowl & Soul', price:145, emoji:'🐟',
+  { name:'บาวล์ปลาแซลมอน', restaurant:'Bowl & Soul', price:80, emoji:'🐟',
     cal:420, protein:30, tags:['โอเมก้า 3','ไขมันดี'], rating:4.9, orders:182,
     badge:'⭐ Top Pick', badgeColor:'#4CAF50', category:['all','protein'] },
-  { name:'โอ๊ตมีลหน้าผลไม้', restaurant:'Healthy Bites', price:75, emoji:'🥣',
+  { name:'โอ๊ตมีลหน้าผลไม้', restaurant:'Healthy Bites', price:65, emoji:'🥣',
     cal:280, protein:10, tags:['ไฟเบอร์สูง','มังสวิรัติ'], rating:4.6, orders:154,
     badge:'🌿 Vegan', badgeColor:'#4CAF50', category:['all','low-cal','budget','veg'] },
-  { name:'ไข่ออมเล็ตผัก', restaurant:'Healthy Bites', price:80, emoji:'🍳',
+  { name:'ไข่ออมเล็ตผัก', restaurant:'Healthy Bites', price:40, emoji:'🍳',
     cal:260, protein:24, tags:['โปรตีนสูง','คาร์บต่ำ'], rating:4.5, orders:143,
     badge:'💪 Fit', badgeColor:'#2196F3', category:['all','protein','low-cal','budget'] },
-  { name:'ก๋วยเตี๋ยวน้ำใสไก่', restaurant:'ก๋วยเตี๋ยวป้าแดง', price:55, emoji:'🍜',
+  { name:'ก๋วยเตี๋ยวน้ำใสไก่', restaurant:'ก๋วยเตี๋ยวป้าแดง', price:45, emoji:'🍜',
     cal:310, protein:22, tags:['ราคาประหยัด','น้ำซุปใส'], rating:4.5, orders:312,
     badge:'💰 Best Value', badgeColor:'#FF9800', category:['all','budget'] },
-  { name:'สมูทตี้โบวล์ผลไม้', restaurant:'Bowl & Soul', price:120, emoji:'🍓',
+  { name:'สมูทตี้โบวล์ผลไม้', restaurant:'Bowl & Soul', price:30, emoji:'🍓',
     cal:240, protein:8, tags:['มังสวิรัติ','แคลต่ำ'], rating:4.7, orders:98,
     badge:'🌿 Fresh', badgeColor:'#4CAF50', category:['all','low-cal','veg'] },
-  { name:'ข้าวหน้าไข่ดาวปลาแซลมอน', restaurant:'Bowl & Soul', price:135, emoji:'🍣',
+  { name:'ข้าวหน้าไข่ดาวปลาแซลมอน', restaurant:'Bowl & Soul', price:75, emoji:'🍣',
     cal:450, protein:35, tags:['โปรตีนสูง','อิ่มนาน'], rating:4.8, orders:167,
     badge:'🔥 Trending', badgeColor:'#F44336', category:['all','protein'] },
 ];
